@@ -1,0 +1,20 @@
+# dependencies and build glfw from source (download from official website)
+python-dev
+libffl-dev
+libffi-dev
+cmake
+freeglut3-dev
+libfreetype6-dev
+libglew-dev
+librandr-dev
+libxrandr-dev
+libxinerma-dev
+libxinerama-dev
+libjpeg8-dev
+libxcursor-dev
+libxxf86vm-dev
+libglm-dev
+assimp # probably doesn't work
+libassimp-dev assimp-utils
+
+

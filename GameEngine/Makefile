@@ -8,41 +8,20 @@ CFLAGS_RELEASE=-Wall -O2
 LIBS=
 
 # Converts all objects into one GameEnigne lib
-GameEngine.a: Camera.o Entity.o errors.o InputManager.o Mesh.o Model.o Shader.o ShaderProgram.o stb_image.o Texture.o Window.o SpotLight.o DirectLight.o PointLight.o Light.o
+GameEngine.a: errors.o InputManager.o Shader.o ShaderProgram.o stb_image.o Texture.o Window.o Quad.o Renderable.o
 	ar rcs $@ $^
 	mv GameEngine.a ../build
 
 Renderable.o: Renderable.cpp Renderable.h
 	$(CC) $@ $< $(LIBS) $(CFLAGS)
 
-DirectLight.o: DirectLight.cpp DirectLight.h
-	$(CC) $@ $< $(LIBS) $(CFLAGS)
-
-SpotLight.o: SpotLight.cpp SpotLight.h
-	$(CC) $@ $< $(LIBS) $(CFLAGS)
-
-PointLight.o: PointLight.cpp PointLight.h
-	$(CC) $@ $< $(LIBS) $(CFLAGS)
-
-Light.o: Light.cpp Light.h
-	$(CC) $@ $< $(LIBS) $(CFLAGS)
-
-Camera.o: Camera.cpp Camera.h
-	$(CC) $@ $< $(LIBS) $(CFLAGS)
-
-Entity.o: Entity.cpp Entity.h
+Quad.o: Quad.cpp Quad.h
 	$(CC) $@ $< $(LIBS) $(CFLAGS)
 
 errors.o: errors.cpp errors.h
 	$(CC) $@ $< $(LIBS) $(CFLAGS)
 
 InputManager.o: InputManager.cpp InputManager.h
-	$(CC) $@ $< $(LIBS) $(CFLAGS)
-
-Mesh.o: Mesh.cpp Mesh.h
-	$(CC) $@ $< $(LIBS) $(CFLAGS)
-
-Model.o: Model.cpp Model.h
 	$(CC) $@ $< $(LIBS) $(CFLAGS)
 
 Shader.o: Shader.cpp Shader.h

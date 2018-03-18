@@ -1,5 +1,5 @@
 #ifndef RENDERABLE_H_
-#define RENDERABLE_H
+#define RENDERABLE_H_
 
 #include "Shader.h"
 
@@ -8,20 +8,7 @@ namespace GameEngine{
 	class Renderable{
 		public:
 			Renderable();
-			virtual void draw(Shader& shader);
-
-
-
-
-
-
-
-
-
-
-
-
-
+			virtual void draw(Shader& shader)=0;
 
 	};
 }

@@ -15,18 +15,28 @@
 # $^ means all prerequisites
 # $< means only the first prerequisite    
 
+
+OS := $(shell uname -s)
 CC=g++ -std=c++17 -c -o
 CCO=g++ -std=c++17
 CFLAGS=-Wall
 CFLAGS_RELEASE=-Wall -O2
-LIBS=-lglfw -lm -lGLEW -lGLU -lGL -lassimp
+LIBS_MAC=-lglfw -lm -lGLEW -lassimp -framework OpenGL
+LIBS=-lglfw -lm -lGLEW -lassimp
 TARGET = game
 
 $(TARGET): final 
 
 final: 
+ifeq ($(OS), Darwin)
+	$(CCO) -o gameBinary main.o Game.o  GameEngine.a $(LIBS_MAC) $(CFLAGS_RELEASE)
+endif
+ifeq ($(OS), Linux)
 	$(CCO) -o gameBinary main.o Game.o -L. -l:GameEngine.a $(LIBS) $(CFLAGS_RELEASE)
+else
+	$(Linux and Darwin supported!)
 
+endif
 clean:
 				rm -f *.o
 				rm -f *.a

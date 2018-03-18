@@ -1,20 +1,11 @@
-# dependencies and build glfw from source (download from official website)
-python-dev
-libffl-dev
-libffi-dev
-cmake
-freeglut3-dev
-libfreetype6-dev
+# The following libraries are required:
 libglew-dev
-librandr-dev
-libxrandr-dev
-libxinerma-dev
-libxinerama-dev
-libjpeg8-dev
-libxcursor-dev
-libxxf86vm-dev
+libassimp-dev
 libglm-dev
-assimp # probably doesn't work
-libassimp-dev assimp-utils
+libglfw3-dev
+# Graphics drivers
+In order to run this program you need graphics drivers that support GLSL 1.3+ (130 and higher)
+If you can not obtain them, there is another way.
+Simply add a matrix invert (4x4) function in all shaders and switch shader version to 120.
 
 

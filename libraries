@@ -1,8 +1,12 @@
 # The following libraries are required:
-libglew-dev
-libassimp-dev
-libglm-dev
-libglfw3-dev
+	run:
+		libglew-dev
+		libassimp-dev
+		libglm-dev
+		libglfw3-dev
+	build:
+		build-essential
+
 # Graphics drivers
 In order to run this program you need graphics drivers that support GLSL 1.3+ (130 and higher)
 If you can not obtain them, there is another way.

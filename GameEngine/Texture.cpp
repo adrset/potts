@@ -19,6 +19,11 @@ namespace GameEngine {
 				format = GL_RGB;
 			else if (m_nrChannels == 4)
 				format = GL_RGBA;
+			else {
+				// Anti warning movement.
+				format = GL_RGB;
+				GameEngine::fatalError("Unsupported texture color format!");
+			}
 
 			glBindTexture(GL_TEXTURE_2D, m_texture);
 			glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data);
@@ -55,6 +60,11 @@ namespace GameEngine {
 				format = GL_RGB;
 			else if (m_nrChannels == 4)
 				format = GL_RGBA;
+			else {
+				// Anti warning movement.
+				format = GL_RGB;
+				GameEngine::fatalError("Unsupported texture color format!");
+			}
 
 			glBindTexture(GL_TEXTURE_2D, m_texture);
 			glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data);

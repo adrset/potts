@@ -42,7 +42,6 @@ namespace GameEngine {
 
 	bool InputManager::isKeyPressed(unsigned int keyID)
 	{
-		bool isPressed = false;
 		if (isKeyDown(keyID) == true && wasKeyDown(keyID) == false) {
 			return true;
 		}
@@ -86,7 +85,6 @@ namespace GameEngine {
 
 	bool InputManager::isMouseKeyPressed(unsigned int keyID)
 	{
-		bool isPressed = false;
 		if (isMouseKeyDown(keyID) == true && wasMouseKeyDown(keyID) == false) {
 			return true;
 		}

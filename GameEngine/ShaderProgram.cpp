@@ -3,8 +3,8 @@
 #include "ShaderProgram.h"
 
 namespace GameEngine {
-	ShaderProgram::ShaderProgram(std::string vertexFile, std::string fragmentFile) : m_vertexShaderID(loadShader(vertexFile, GL_VERTEX_SHADER)),
-		m_fragmentShaderID(loadShader(fragmentFile, GL_FRAGMENT_SHADER)), m_programID(glCreateProgram())
+	ShaderProgram::ShaderProgram(std::string vertexFile, std::string fragmentFile) : m_programID(glCreateProgram()), m_vertexShaderID(loadShader(vertexFile, GL_VERTEX_SHADER)),
+		m_fragmentShaderID(loadShader(fragmentFile, GL_FRAGMENT_SHADER))
 	{//
 
 	}
@@ -96,7 +96,7 @@ namespace GameEngine {
 		GLint success = 0;
 		glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
 
-		if (success = GL_FALSE) {
+		if (success == GL_FALSE) {
 			GLint maxLength;
 			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &maxLength);
 

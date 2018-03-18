@@ -109,8 +109,6 @@ void Game::loop() {
 	lightingShader.use();
 
 
-	GameEngine::Entity mod("nanosuit.obj");
-
     m_pointLights.push_back(new GameEngine::PointLight(pointLightPositions[0], glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f), glm::vec3(1.0f, 0.09f, 0.032f)));
     m_pointLights.push_back(new GameEngine::PointLight(pointLightPositions[1], glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f), glm::vec3(1.0f, 0.09f, 0.032f)));
     m_pointLights.push_back(new GameEngine::PointLight(pointLightPositions[2], glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f), glm::vec3(1.0f, 0.09f, 0.032f)));
@@ -155,12 +153,6 @@ void Game::loop() {
 
 		lightingShader.setMat4("projection", projection);
 		lightingShader.setMat4("view", view);
-		mod.incAngles(glm::vec3(0.0f, 0.1f, 0.0f));
-
-
-		// draw Entites
-		mod.draw(lightingShader);
-
 
 		// world transformation
 		glm::mat4 model;

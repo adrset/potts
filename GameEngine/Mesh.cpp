@@ -15,8 +15,8 @@ namespace GameEngine {
 		// bind appropriate textures
 		unsigned int diffuseNr = 1;
 		unsigned int specularNr = 1;
-		unsigned int normalNr = 1;
-		unsigned int heightNr = 1;
+		// unsigned int normalNr = 1;
+		// unsigned int heightNr = 1;
 		for (GLuint i = 0; i < this->textures.size(); i++)
 		{
 			glActiveTexture(GL_TEXTURE0 + i);

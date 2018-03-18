@@ -25,7 +25,7 @@ TARGET = game
 $(TARGET): final 
 
 final: 
-	$(CCO) -o gameBinary main.o Game.o -L. -l:GameEngine.a $(LIBS)
+	$(CCO) -o gameBinary main.o Game.o -L. -l:GameEngine.a $(LIBS) $(CFLAGS_RELEASE)
 
 clean:
 				rm -f *.o

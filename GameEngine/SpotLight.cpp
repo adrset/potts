@@ -1,8 +1,12 @@
 #include "SpotLight.h"
 
 namespace GameEngine{
-		SpotLight::SpotLight(glm::vec3& pos, glm::vec3& dir, glm::vec3 amb, glm::vec3 dif, glm::vec3 spe, glm::vec3 clq, glm::vec2 cut) : Light(amb, dif, spe),
-			m_position(pos), m_direction(dir),m_clq(clq), m_cutOff(cut) {
+		SpotLight::SpotLight(glm::vec3& pos, glm::vec3& dir, glm::vec3 amb, glm::vec3 dif, glm::vec3 spe, glm::vec3 clq, glm::vec2 cut) :
+		 Light(amb, dif, spe),
+		 m_direction(dir),
+		 m_position(pos),
+		 m_clq(clq),
+		 m_cutOff(cut) {
 
 		}
 

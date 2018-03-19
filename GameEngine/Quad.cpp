@@ -3,7 +3,7 @@
 #include <iostream>
 namespace GameEngine{
 
-  Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, float scale) : Renderable(), m_position(position), m_scale(scale){
+  Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, glm::vec3 color, float scale) : Renderable(), m_position(position), m_color(color), m_scale(scale){
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -30,6 +30,10 @@ namespace GameEngine{
     glBindVertexArray(0);
   }
 
+  void Quad::setColor(glm::vec3 color){
+    this->m_color = color;
+  }
+
   void Quad::setPosition(glm::vec2& position){
     this->m_position = position;
   }
@@ -46,6 +50,7 @@ namespace GameEngine{
     m_model = glm::scale(m_model, glm::vec3(m_scale)); 
    
     shader.setMat4("model", m_model);
+    shader.setVec3("color", m_color);
     //shader.setMat4("view", view);
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);

@@ -52,7 +52,7 @@ void Game::loop() {
 	lightingShader.setMat4("orthoMatrix", projection);
 
 
-	GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), 100.0f);
+	GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 
 
 	// -----------

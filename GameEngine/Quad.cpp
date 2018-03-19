@@ -3,7 +3,7 @@
 
 namespace GameEngine{
 
-  Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize) : Renderable() {
+  Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, float scale) : Renderable(), m_position(position), m_scale(scale){
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -30,8 +30,17 @@ namespace GameEngine{
     glBindVertexArray(0);
   }
 
+  void Quad::setPosition(glm::vec2& position){
+    this->m_position = position;
+  }
+
+  void Quad::setScale(float scale){
+    this->m_scale = scale;
+  }
+
   void Quad::draw(Shader& shader){
     shader.use();
+    shader.setVec2("position", m_position);
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

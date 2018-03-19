@@ -23,6 +23,7 @@ TARGET = game
 
 $(TARGET):
 	+$(MAKE) -C GameEngine
+	+$(MAKE) -C Potts
 	+$(MAKE) -C Game
 	+$(MAKE) -C build
 

@@ -52,6 +52,7 @@ namespace GameEngine {
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		glfwSetErrorCallback(glfwError);
 
 		m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);

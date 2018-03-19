@@ -55,9 +55,9 @@ void Game::loop() {
 
 	std::vector<GameEngine::Quad*> quads;
 
-	for(int i=0;i< 4; i++){
-		for(int j=0;j< 4; j++){
-			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100*i, 100*j), glm::vec3(i*0.2, j*0.15, (i+j) * 0.12), 100.0f));
+	for(int i=0;i< 40; i++){
+		for(int j=0;j< 40; j++){
+			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(i*0.02, j*0.015, (i+j) * 0.012), 10.0f));
 		}
 	}
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);

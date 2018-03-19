@@ -2,7 +2,8 @@
 #include <GameEngine/Texture.h>
 #include <GameEngine/Quad.h>
 #include <GameEngine/stb_image.h>
-
+#include <vector>
+#include <cstdlib>
 bool firstMouse = true;
 
 // timing
@@ -47,12 +48,19 @@ void Game::loop() {
       1, 2, 3   // second Triangle
   };
 
+  	srand(time(NULL));
   	lightingShader.use();
 	glm::mat4 projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -1.0f, 1.00f);
 	lightingShader.setMat4("orthoMatrix", projection);
 
+	std::vector<GameEngine::Quad*> quads;
 
-	GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
+	for(int i=0;i< 4; i++){
+		for(int j=0;j< 4; j++){
+			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100*i, 100*j), glm::vec3(i*0.2, j*0.15, (i+j) * 0.12), 100.0f));
+		}
+	}
+	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 
 
 	// -----------
@@ -64,7 +72,9 @@ void Game::loop() {
 		// ------
 		m_window->clear();
 		
-		quad->draw(lightingShader);
+		for(auto* it: quads){
+			it->draw(lightingShader);
+		}
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

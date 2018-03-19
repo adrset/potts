@@ -1,6 +1,6 @@
 #include "GameEngine.h"
 #include "Quad.h"
-
+#include <iostream>
 namespace GameEngine{
 
   Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, float scale) : Renderable(), m_position(position), m_scale(scale){
@@ -40,7 +40,13 @@ namespace GameEngine{
 
   void Quad::draw(Shader& shader){
     shader.use();
-    shader.setVec2("position", m_position);
+    m_model = glm::mat4();
+    m_model = glm::translate(m_model, glm::vec3(m_position.x, m_position.y, 0));
+
+    m_model = glm::scale(m_model, glm::vec3(m_scale)); 
+   
+    shader.setMat4("model", m_model);
+    //shader.setMat4("view", view);
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

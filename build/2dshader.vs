@@ -1,7 +1,10 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
-uniform vec2 position;
+uniform mat4 model;
+uniform mat4 orthoMatrix;
+uniform mat4 view;
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0) + vec4(position.x, position.y, 0, 0);
+    vec2 pos = vec2(aPos.x + 1, aPos.y + 1) / 2; 
+    gl_Position = orthoMatrix * model * vec4(pos, 0.0, 1.0);
 }

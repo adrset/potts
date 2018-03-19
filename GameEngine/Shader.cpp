@@ -64,35 +64,39 @@ namespace GameEngine {
 
 	void Shader::setVec3(const std::string &name, const glm::vec3 &value) const
 	{
-		glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+		glUniform3fv(getUniformLocation(name), 1, glm::value_ptr(value));
 	}
 	void Shader::setVec3(const std::string &name, float x, float y, float z) const
 	{
-		glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+		glUniform3f(getUniformLocation(name), x, y, z);
 	}
 
 	void Shader::setVec2(const std::string &name, const glm::vec2 &value) const {
-		glUniform2f(glGetUniformLocation(ID, name.c_str()), value.x, value.y);
+		glUniform2f(getUniformLocation(name), value.x, value.y);
 	}
 
 	void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const
 	{
-		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 	}
 
 	void Shader::setBool(const std::string &name, bool value) const
 	{
-		glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+		glUniform1i(getUniformLocation(name), (int)value);
 	}
 
 	void Shader::setInt(const std::string &name, int value) const
 	{
-		glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+		glUniform1i(getUniformLocation(name), value);
 	}
 
 	void Shader::setFloat(const std::string &name, float value) const
 	{
-		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+		glUniform1f(getUniformLocation(name), value);
+	}
+
+	int Shader::getUniformLocation(const std::string uniform) const {
+		return glGetUniformLocation(ID, uniform.c_str());
 	}
 
 

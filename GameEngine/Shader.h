@@ -5,8 +5,10 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <map>
 #include <GL/glew.h>
 #include <glm/matrix.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "errors.h"
 
 namespace GameEngine {
@@ -29,6 +31,8 @@ namespace GameEngine {
 		void setVec3(const std::string &name, float x, float y, float z) const;
 		void setVec2(const std::string &name, const glm::vec2 &value) const;
 	private:
+		int getUniformLocation(const std::string uniform) const;
+		std::map <std::string, int> uniforms;
 		void checkCompileErrors(unsigned int shader, std::string type);
 	};
 }

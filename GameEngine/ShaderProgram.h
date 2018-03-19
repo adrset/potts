@@ -19,6 +19,7 @@ namespace GameEngine {
 		void start();
 		void stop();
 		void cleanUp();
+		int getProgramID() const { return m_programID; }
 		ShaderProgram(std::string vertexFile, std::string fragmentFile);
 		~ShaderProgram();
 	protected:

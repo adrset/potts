@@ -47,7 +47,12 @@ void Game::loop() {
       1, 2, 3   // second Triangle
   };
 
-	GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(0.1), 1.0f);
+  	lightingShader.use();
+	glm::mat4 projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -1.0f, 1.00f);
+	lightingShader.setMat4("orthoMatrix", projection);
+
+
+	GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), 100.0f);
 
 
 	// -----------

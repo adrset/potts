@@ -2,6 +2,8 @@
 #define QUAD_H_
 
 #include <glm/glm.hpp>
+#include <glm/matrix.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
 #include "Renderable.h"
 
@@ -18,6 +20,7 @@ namespace GameEngine{
     unsigned int getVBO() const { return VBO; } // only positions stored
     unsigned int getVAO() const { return VAO; }
   private:
+    glm::mat4 m_model; //Reusable mat4
     unsigned int VBO, VAO, EBO;
     glm::vec2 m_position;
     float m_scale;

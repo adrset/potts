@@ -2,6 +2,16 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#ifndef GLFW_TRUE
+#define GLFW_TRUE 1
+#endif
+
+#ifndef GLFW_FALSE
+#define GLFW_FALSE 0
+#endif 
+
+
 #include <string>
 #include "InputManager.h"
 namespace GameEngine {

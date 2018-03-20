@@ -14,6 +14,7 @@ float lastFrame = 0.0f;
 Game::Game(int width, int height, std::string title): m_width{width}, m_height(height), m_title(title)
 {
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
+	m_timer = new GameEngine::Timer(60);
 	lastX = m_width / 2.0f;
 	lastY = m_height / 2.0f;
 	//glm::vec3 pos, glm::vec3 amb, glm::vec3 dif, glm::vec3 spe, glm::vec3 clq
@@ -55,8 +56,8 @@ void Game::loop() {
 
 	std::vector<GameEngine::Quad*> quads;
 
-	for(int i=0;i< 40; i++){
-		for(int j=0;j< 40; j++){
+	for(int i=0;i< 80; i++){
+		for(int j=0;j< 80; j++){
 			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(i*0.02, j*0.015, (i+j) * 0.012), 10.0f));
 		}
 	}
@@ -66,12 +67,13 @@ void Game::loop() {
 	// -----------
 	while (!m_window->shouldClose())
 	{
+		m_timer->start();
 		processInput();
 
 		// render
 		// ------
 		m_window->clear();
-		
+
 		for(auto* it: quads){
 			it->draw(lightingShader);
 		}
@@ -80,6 +82,7 @@ void Game::loop() {
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(m_window->getWindowID());
 		glfwPollEvents();
+		std::cout << "FPS: " << 1.0/m_timer->end() << std::endl;
 	}
 
 	cleanUp();

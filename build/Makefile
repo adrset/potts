@@ -22,7 +22,7 @@ CCO=g++ -std=c++17
 CFLAGS=-Wall
 CFLAGS_RELEASE=-Wall -O2
 LIBS_MAC=-lglfw -lm -lGLEW -lassimp -framework OpenGL
-LIBS=-lglfw -lm -lGLEW -lassimp
+LIBS=-lglfw -lm -lGLEW -lassimp -lGL
 TARGET = game
 
 $(TARGET): final 
@@ -32,7 +32,7 @@ ifeq ($(OS), Darwin)
 	$(CCO) -o gameBinary main.o Game.o GameEngine.a Potts.a $(LIBS_MAC) $(CFLAGS_RELEASE)
 endif
 ifeq ($(OS), Linux)
-	$(CCO) -o gameBinary main.o Game.o -L. -l:GameEngine.a -:Potts.a $(LIBS) $(CFLAGS_RELEASE)
+	$(CCO) -o gameBinary main.o Game.o -L. -l:GameEngine.a -l:Potts.a $(LIBS) $(CFLAGS_RELEASE)
 else
 	$(Linux and Darwin supported!)
 

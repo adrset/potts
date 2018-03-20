@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GameEngine/Window.h>
 #include <GameEngine/Shader.h>
-
+#include <GameEngine/Timer.h>
 class Game
 {
 public:
@@ -20,8 +20,8 @@ private:
 	int m_height;
 	std::string m_title;
 	GameEngine::Window* m_window;
+	GameEngine::Timer* m_timer;
 	float lastX;
 	float lastY;
 	void loop();
 };
-

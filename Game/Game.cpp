@@ -17,6 +17,7 @@ float lastFrame = 0.0f;
 Game::Game(int width, int height, std::string title): m_width{width}, m_height(height), m_title(title)
 {
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
+	m_timer = new GameEngine::Timer(60);
 	lastX = m_width / 2.0f;
 	lastY = m_height / 2.0f;
 	//glm::vec3 pos, glm::vec3 amb, glm::vec3 dif, glm::vec3 spe, glm::vec3 clq
@@ -96,7 +97,8 @@ void Game::loop() {
 
 	while (!m_window->shouldClose())
 	{
-		
+		m_timer->start();
+
 		processInput();
 
 		// render
@@ -122,6 +124,8 @@ void Game::loop() {
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(m_window->getWindowID());
 		glfwPollEvents();
+
+		std::cout << "FPS: " << 1.0/m_timer->end() << std::endl;
 	}
 
 	cleanUp();

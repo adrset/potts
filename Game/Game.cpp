@@ -4,6 +4,9 @@
 #include <GameEngine/stb_image.h>
 #include <vector>
 #include <cstdlib>
+
+#include <iostream>
+#include <unistd.h>
 bool firstMouse = true;
 
 // timing
@@ -54,12 +57,18 @@ void Game::loop() {
 	lightingShader.setMat4("orthoMatrix", projection);
 
 	std::vector<GameEngine::Quad*> quads;
+    //printf("d");
+    Potts::MainMatrix potts(40, 1, 1, 5, 3 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+
 
 	for(int i=0;i< 40; i++){
 		for(int j=0;j< 40; j++){
-			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(i*0.02, j*0.015, (i+j) * 0.012), 10.0f));
+            float color = 0.3 * (float)potts.getSpin(i,j);
+            //float color=0.6;
+			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(color, color, color), 10.0f));
 		}
 	}
+
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 
 
@@ -71,10 +80,24 @@ void Game::loop() {
 		// render
 		// ------
 		m_window->clear();
-		
+
 		for(auto* it: quads){
 			it->draw(lightingShader);
 		}
+
+		//POTTS INTENSIFIES!!
+		for(int i=0;i<60;i++){
+            potts.MetropolisStep();
+		}
+
+        for(int i=0;i< 40; i++){
+            for(int j=0;j< 40; j++){
+                float color = 0.333 * potts.getSpin(i,j);
+                quads[i*40+j]->setColor(glm::vec3(color,color,color));
+            }
+        }
+
+		//usleep(1000000);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

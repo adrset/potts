@@ -8,11 +8,14 @@ CFLAGS_RELEASE=-Wall -O2
 LIBS=
 
 # Converts all objects into one GameEnigne lib
-GameEngine.a: errors.o InputManager.o Shader.o stb_image.o Texture.o Window.o Quad.o Renderable.o
+GameEngine.a: errors.o InputManager.o Shader.o stb_image.o Texture.o Window.o Quad.o Renderable.o QuadField.o
 	ar rcs $@ $^
 	mv GameEngine.a ../build
 
 Renderable.o: Renderable.cpp Renderable.h
+	$(CC) $@ $< $(LIBS) $(CFLAGS)
+
+QuadField.o: QuadField.cpp QuadField.h
 	$(CC) $@ $< $(LIBS) $(CFLAGS)
 
 Quad.o: Quad.cpp Quad.h

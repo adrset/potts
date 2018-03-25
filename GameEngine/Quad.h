@@ -10,6 +10,7 @@
 namespace GameEngine{
   class Quad : public Renderable{
   public:
+    Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize);
     Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, glm::vec3 color, float scale);
     glm::vec2 getPosition() const { return m_position; }
     float getScale() const { return m_scale; }
@@ -21,7 +22,7 @@ namespace GameEngine{
     unsigned int getEBO() const { return EBO; }
     unsigned int getVBO() const { return VBO; } // only positions stored
     unsigned int getVAO() const { return VAO; }
-  private:
+  protected:
     glm::mat4 m_model; //Reusable mat4
     unsigned int VBO, VAO, EBO;
     glm::vec2 m_position;

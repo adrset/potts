@@ -2,8 +2,11 @@
 #include <GameEngine/Texture.h>
 #include <GameEngine/Quad.h>
 #include <GameEngine/stb_image.h>
+#include <GameEngine/QuadField.h>
 #include <vector>
 #include <cstdlib>
+#include <ctime>
+#include <cmath>
 bool firstMouse = true;
 
 // timing
@@ -27,6 +30,7 @@ void Game::start(){
 
 void Game::loop() {
 
+	srand(time(NULL));
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
@@ -50,16 +54,22 @@ void Game::loop() {
 
   	srand(time(NULL));
   	lightingShader.use();
-	glm::mat4 projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -1.0f, 1.00f);
+	glm::mat4 projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -10.0f, 10.00f);
 	lightingShader.setMat4("orthoMatrix", projection);
 
 	std::vector<GameEngine::Quad*> quads;
-
-	for(int i=0;i< 40; i++){
-		for(int j=0;j< 40; j++){
-			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(i*0.02, j*0.015, (i+j) * 0.012), 10.0f));
+	std::vector<glm::vec3> pos;
+	std::vector<glm::vec3> col;
+	for(int i=0;i< 20; i++){
+		for(int j=0;j< 20; j++){
+			pos.push_back(glm::vec3(20*i, 20*j, 0));
+			col.push_back(glm::vec3(i*0.04, j*0.03, (i+j) * 0.024));
+			//quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(20*i, 20*j), glm::vec3(i*0.04, j*0.03, (i+j) * 0.024), 20.0f));
 		}
 	}
+
+	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, 20.0f);
+
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 
 
@@ -71,10 +81,11 @@ void Game::loop() {
 		// render
 		// ------
 		m_window->clear();
-		
-		for(auto* it: quads){
+        lightingShader.setMat4("orthoMatrix", projection);
+		field.update(lightingShader);
+		/*for(auto* it: quads){
 			it->draw(lightingShader);
-		}
+		}*/
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

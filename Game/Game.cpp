@@ -1,9 +1,9 @@
 #include "Game.h"
-#include <GameEngine/Texture.h>
+//#include <GameEngine/Texture.h>
 #include <GameEngine/Quad.h>
-#include <GameEngine/stb_image.h>
 #include <vector>
 #include <cstdlib>
+#include <fstream>
 
 #include <iostream>
 #include <unistd.h>
@@ -57,15 +57,25 @@ void Game::loop() {
 	lightingShader.setMat4("orthoMatrix", projection);
 
 	std::vector<GameEngine::Quad*> quads;
-    //printf("d");
-    Potts::MainMatrix potts(40, 1, 1, 5, 3 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+
+
+    float temperature       = 1;
+    float couplingFactor    = 0.01;
+    float nSpins            = 2;
+    Potts::MainMatrix potts(40, temperature, couplingFactor, (1+nSpins), 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+    /*
+        dobre wybory:
+        t=3     j=1     max=3   min=0
+        t=      j=      max=    min=
+        t=      j=      max=    min=
+        t=      j=      max=    min=
+    */
 
 
 	for(int i=0;i< 40; i++){
 		for(int j=0;j< 40; j++){
             float color = 0.3 * (float)potts.getSpin(i,j);
-            //float color=0.6;
-			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(color, color, color), 10.0f));
+			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(color, 0.2, 0.2), 10.0f));
 		}
 	}
 
@@ -86,18 +96,17 @@ void Game::loop() {
 		}
 
 		//POTTS INTENSIFIES!!
-		for(int i=0;i<60;i++){
+		for(int i=0;i<16000;i++){
             potts.MetropolisStep();
 		}
 
         for(int i=0;i< 40; i++){
             for(int j=0;j< 40; j++){
                 float color = 0.333 * potts.getSpin(i,j);
-                quads[i*40+j]->setColor(glm::vec3(color,color,color));
+                quads[i*40+j]->setColor(glm::vec3(0,color/2,color));
             }
         }
-
-		//usleep(1000000);
+        //POTTS DEMINISHED :(
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

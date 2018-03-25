@@ -8,7 +8,7 @@ CFLAGS_RELEASE=-Wall -O2
 LIBS=
 
 # Converts all objects into one GameEnigne lib
-GameEngine.a: errors.o InputManager.o Shader.o stb_image.o Texture.o Window.o Quad.o Renderable.o
+GameEngine.a: errors.o InputManager.o Shader.o Texture.o Window.o Quad.o Renderable.o
 	ar rcs $@ $^
 	mv GameEngine.a ../build
 

@@ -27,6 +27,7 @@ class MainMatrix{
 	float calcHamilton(int x, int y, bool fromMatrix=true, char subSpin=0);	//calculates hamiltonian for point (x,y)
 	char getRandomSpin(); //zwraca losową wartość spinu spomiędzy 0-masSpin
 
+
 	public:
     MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
     ~MainMatrix();
@@ -34,6 +35,7 @@ class MainMatrix{
 	int getMatrixSize() const {return matrixSize;};
 	int getSpin(int x, int y);
 	void getSpinColor(int x, int y);
+	char getSpinsN() const {return states;};
 };
 
 

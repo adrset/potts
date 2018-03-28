@@ -7,7 +7,7 @@ CCO=g++ -std=c++17
 CFLAGS=-Wall
 CFLAGS_RELEASE=-Wall -O2
 LIBS=-lglfw -lm -lGLEW -lGLU -lGL -lassimp
-INC=-I../
+INC=-I../ -I../include/
 TARGET = game
 
 $(TARGET): main.o Game.o move

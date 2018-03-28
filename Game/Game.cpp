@@ -104,8 +104,9 @@ void Game::loop() {
 
         for(int i=0;i< 40; i++){
             for(int j=0;j< 40; j++){
-                float color = 0.333 * potts.getSpin(i,j);
-                quads[i*40+j]->setColor(glm::vec3(0,color/2,color));
+                float color = potts.getSpin(i,j);
+                float maxSpin = potts.getSpinsN();
+                quads[i*40+j]->setColor(glm::vec3(color/maxSpin,0,256./color));
             }
         }
         //POTTS DEMINISHED :(

@@ -21,8 +21,8 @@ CC=g++ -std=c++17 -c -o
 CCO=g++ -std=c++17
 CFLAGS=-Wall
 CFLAGS_RELEASE=-Wall -O2
-LIBS_MAC=-lglfw -lm -lGLEW -lassimp -framework OpenGL
-LIBS=-lglfw -lm -lGLEW -lassimp -lGL
+LIBS_MAC=-L../lib/ -llibglfw.so -llibGLEW.so -framework OpenGL
+LIBS= -L../lib/ -l:libglfw.so -l:libGLEW.so -lGL
 TARGET = game
 
 $(TARGET): final 

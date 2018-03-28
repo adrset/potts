@@ -1,0 +1,34 @@
+#ifndef POTTS_H_
+#define POTTS_H_
+
+#include <cstdlib> 
+#include <cmath> 
+
+namespace Potts {
+
+class MainMatrix{
+
+	float temperature;
+	CHAR ** matrix;	//pointer to the main square array of cells
+	int matrixSize;		//dimension of matrix
+	int maxState;
+	int minState;
+
+	MainMatrix(int newMatrixSize, float simTemperature);
+
+	int getSpin(int x, int y);
+	void setSpin(int x,int y);		
+	
+	int cronecker(int a, int b);
+	int validRandom(); 	//returns random number from 0 to matrixSize;
+	float calculateHamilton(int x, int y);	//calculates hamiltonian for point (x,y) 
+	char getRandomSpin(); //zwraca losową wartość spinu spomiędzy 0-masSpin
+
+	public:
+	
+	void MetropolisStep();	//does one step of calculation
+};
+
+
+}
+#endif

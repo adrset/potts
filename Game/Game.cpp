@@ -59,10 +59,10 @@ void Game::loop() {
 	std::vector<GameEngine::Quad*> quads;
 
 
-    float temperature       = 1;
-    float couplingFactor    = 0.01;
-    float nSpins            = 2;
-    Potts::MainMatrix potts(40, temperature, couplingFactor, (1+nSpins), 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+    float temperature       = 0.001;
+    float couplingFactor    = 1;
+    float nSpins            = 12;
+    Potts::MainMatrix potts(40, temperature, couplingFactor, (nSpins), 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
     /*
         dobre wybory:
         t=3     j=1     max=3   min=0
@@ -83,8 +83,10 @@ void Game::loop() {
 
 
 	// -----------
+	int ii=0;
 	while (!m_window->shouldClose())
 	{
+		
 		processInput();
 
 		// render
@@ -96,8 +98,8 @@ void Game::loop() {
 		}
 
 		//POTTS INTENSIFIES!!
-		for(int i=0;i<16000;i++){
-            potts.MetropolisStep();
+		for(int i=0;i<1600;i++){
+           if(ii<100) potts.MetropolisStep();
 		}
 
         for(int i=0;i< 40; i++){

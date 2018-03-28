@@ -75,11 +75,11 @@ namespace Potts {
 		if( currentHamilton > probableHamilton )            //if new state is better than current, overwrite the newSpin as current spin
             setSpin(x,y,newSpin);
         else{
-            if( random01() > exp(probableHamilton/temperature) )                                     //if we have luck them set spin to newSpin
+            if( random01() < exp(-(probableHamilton-currentHamilton)/temperature) )                                     //if we have luck them set spin to newSpin
                 setSpin(x,y,newSpin);
         }
         //if we do not have luck the spin stays the same
-
+		//printf("hej");
 	}
 	void MainMatrix::getSpinColor(int x, int y){
 

@@ -1,7 +1,9 @@
 #include "Game.h"
+
 #include <GameEngine/QuadField.h>
 #include <vector>
 #include <cstdlib>
+#include <fstream>
 
 #include <iostream>
 #include <unistd.h>
@@ -56,24 +58,45 @@ void Game::loop() {
 	lightingShader.setMat4("orthoMatrix", projection);
 
 	std::vector<GameEngine::Quad*> quads;
+
 	std::vector<glm::vec3> pos;
 	std::vector<glm::vec3> col;
-	for(int i=0;i< 20; i++){
-		for(int j=0;j< 20; j++){
-			pos.push_back(glm::vec3(20*i, 20*j, 0));
-			col.push_back(glm::vec3(i*0.04, j*0.03, (i+j) * 0.024));
-			//quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(20*i, 20*j), glm::vec3(i*0.04, j*0.03, (i+j) * 0.024), 20.0f));
+
+
+    float temperature       = 0.001;
+    float couplingFactor    = 1;
+    float nSpins            = 12;
+    Potts::MainMatrix potts(40, temperature, couplingFactor, (nSpins), 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+
+	for(int i=0;i< 40; i++){
+		for(int j=0;j< 40; j++){
+            float color = 0.3 * (float)potts.getSpin(i,j);
+			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(color, 0.2, 0.2), 10.0f));
+
+			pos.push_back(glm::vec3(10*i, 10*j, 0));
+			col.push_back(glm::vec3(color, 0.2, 0.2));
 		}
 	}
 
-	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, 20.0f);
+
+    /*
+        dobre wybory:
+        t=3     j=1     max=3   min=0
+        t=      j=      max=    min=
+        t=      j=      max=    min=
+        t=      j=      max=    min=
+    */
+
+	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, 10.0f);
 
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 
 
 	// -----------
+
 	while (!m_window->shouldClose())
 	{
+		
 		processInput();
 
 		// render
@@ -81,9 +104,19 @@ void Game::loop() {
 		m_window->clear();
         lightingShader.setMat4("orthoMatrix", projection);
 		field.update(lightingShader);
-		
 
-		//usleep(1000000);
+		//POTTS INTENSIFIES!!
+		for(int i=0;i<1600;i++){
+        	potts.MetropolisStep();
+		}
+
+        for(int i=0;i< 40; i++){
+            for(int j=0;j< 40; j++){
+                float color = 0.333 * potts.getSpin(i,j);
+                field.setColor(i*40+j, glm::vec3(0,color/2,color));
+            }
+        }
+        //POTTS DEMINISHED :(
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

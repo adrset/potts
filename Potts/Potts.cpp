@@ -8,6 +8,7 @@ namespace Potts {
         coupling = couplingFactor;
         maxState = maxSpin;
         minState = minSpin;
+        states = maxState-minState;
 //commented because arrays are fucked-up :(
 /*
         matrix = new char*[matrixSize];
@@ -18,7 +19,7 @@ namespace Potts {
 
         for(int x=0 ; x<matrixSize ; x++){
             for(int y=0 ; y<matrixSize ; y++){
-                setSpin(x,y, ((float)rand()/RAND_MAX)*(maxState-minState) );
+                setSpin(x,y, getRandomSpin() );
             }
 
         }
@@ -26,15 +27,9 @@ namespace Potts {
 
 	}
     MainMatrix::~MainMatrix(){
-    /*
-        for(int i=0;i<matrixSize;i++){
-                delete [] matrix[i];
-        }
-        delete [] matrix;
-*/
     }
     float MainMatrix::random01(){
-        return rand()%100 / 100;
+        return (float)(rand()%100) / 100;
     }
 	int MainMatrix::getSpin(int x, int y){
 		return matrix[x][y];
@@ -46,23 +41,11 @@ namespace Potts {
 		return 	rand()%matrixSize;
 	}
     char MainMatrix::getRandomSpin(){
-        return (maxState - minState) * (float)rand()/RAND_MAX;
+        return rand()%states+minState;
     }
 	int MainMatrix::cronecker(int a, int b){
 		if(a==b) return 1;
 		else return 0;
-	}
-	bool MainMatrix::metroDecision(int x, int y, float oldH, float youngH){
-        float p=((float)rand()/RAND_MAX);
-        bool flag=false;
-        float z = youngH/temperature;
-        if( oldH > youngH )
-            flag = true;
-        else{
-            if( p > exp(z))
-                flag = true;
-        }
-        return flag;
 	}
 	float MainMatrix::calcHamilton(int x, int y, bool fromMatrix, char subSpin){
 		float H=0;
@@ -82,32 +65,24 @@ namespace Potts {
 	}
 
 	void MainMatrix::MetropolisStep(){
-		int x,y;		    //
-		x=validRandom();	//random cell picking
-		y=validRandom();	//
-
+		int x=validRandom();	//random cell picking
+		int y=validRandom();	//
 
 		float currentHamilton = calcHamilton(x,y);			//calculating next state
 		char newSpin = getRandomSpin();					    //newsSPin value is by default set to the random one, thus less code to overwrite the value (may be changed)
 		float probableHamilton = calcHamilton(x,y,false,newSpin);
 
-		//float p=((float)rand()/RAND_MAX);                   //probability of change
-		float p = random01();
-		p = 0.35;                  //if p=0.3 funny shit happens :)
-		float z = exp( probableHamilton/temperature );      //chance of change
-
 		if( currentHamilton > probableHamilton )            //if new state is better than current, overwrite the newSpin as current spin
             setSpin(x,y,newSpin);
         else{
-            if( p > z )                                     //if we have luck them set spin to newSpin
+            if( random01() < exp(-(probableHamilton-currentHamilton)/temperature) )                                     //if we have luck them set spin to newSpin
                 setSpin(x,y,newSpin);
         }
         //if we do not have luck the spin stays the same
-		/*
-        if( metroDecision(x,y,currentHamilton,probableHamilton) ){
-            setSpin(x,y,newSpin);
-		}
-        */
+		//printf("hej");
 	}
+	void MainMatrix::getSpinColor(int x, int y){
+
+    }
 
 }

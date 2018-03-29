@@ -1,0 +1,62 @@
+#include "Potts.h"
+
+namespace Potts {
+	
+	int MainMatrix::getSpin(int x, int y){
+		if( (x >= (matrixSize) || x==0 || y >= (matrixSize) || y==0 )){
+			if( x >= matrixSize) x=0;
+			else x= matrixSize;
+
+			if( y >= matrixSize) y=0;
+			else y= matrixSize; 
+		}
+		return matrix[x][y];
+		
+	}
+	void MainMatrix::setSpin(int x,int y, char newSpin){
+		matrix[x][y] == newSpin;
+	}
+
+	int MainMatrix::validRandom(){
+		return 	rand()%matrixSize;
+	}
+	
+	int MainMatrix::cronecker(int a, int b){
+		if(a==b) return 1;
+		else return 0;
+	}
+
+	char MainMatrix::calculateHamilton(int x, int y, bool fromMatrix=true, char subSpin=0){
+		int H=0;
+		char currentSpin;
+		if(fromMatrix) 
+			currentSpin = getSpin(x,y);
+		else
+			currentSPin = subSpin;
+		
+		H += cronecker( currentSPin, getSpin(x+1,y) );
+		H += cronecker( currentSPin, getSpin(x-1,y) );
+		H += cronecker( currentSPin, getSpin(x,y+1) );
+		H += cronecker( currentSPin, getSpin(x,y-1) );
+
+		H *= (-1) * coupling;
+		return H;
+	}
+
+	void MainMatrix::MetropolisStep(){
+		int x,y;		//
+		x=validRandom();	//random cell picking
+		y=validRandom();	//
+		
+		float currentHamilton = calculateHamilton(x,y);			//calculating next state
+		char newSpin = getRandomSpin();					//newsSPin value is by default set to the random one, thus less code to overwrite the value (may be changed)
+		float probableHamilton = calculateHamilton(x,y,false,newSpin);
+		
+		if( probableHamilton > currentHamilton ){
+			if( exp( probableHamilton / temperature ) < rand() )
+				newSpin = getSpin(x,y);
+		}
+		setSpin(x,y,newSpin);
+	}
+	
+}

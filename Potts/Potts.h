@@ -26,7 +26,6 @@ class MainMatrix{
 	float random01();
 	float calcHamilton(int x, int y, bool fromMatrix=true, char subSpin=0);	//calculates hamiltonian for point (x,y)
 	char getRandomSpin(); //zwraca losową wartość spinu spomiędzy 0-masSpin
-	bool metroDecision(int x, int y, float oldH, float youngH);
 
 	public:
     MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
@@ -34,6 +33,7 @@ class MainMatrix{
 	void MetropolisStep();	//does one step of calculation
 	int getMatrixSize() const {return matrixSize;};
 	int getSpin(int x, int y);
+	void getSpinColor(int x, int y);
 };
 
 

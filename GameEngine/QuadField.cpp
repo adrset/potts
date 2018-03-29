@@ -107,6 +107,10 @@ namespace GameEngine {
 			}
 		}
 
+		void QuadField::setColor(int i, glm::vec3 col){
+			m_colors[i] = col;
+		}
+
 		void QuadField::prepare() {
 
 			glBindVertexArray(VAO);

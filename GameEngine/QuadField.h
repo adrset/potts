@@ -13,6 +13,7 @@ namespace GameEngine {
 		void update(Shader& shader);
 		void addInstanceAttribute(int vao, int vbo, int attribute, int dataSize, int dataLength, int offset);
 		void prepare();
+		void setColor(int i, glm::vec3 col);
 	private:
 		void stop();
 		void updateVBO();

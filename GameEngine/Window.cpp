@@ -2,6 +2,8 @@
 #include "Window.h"
 #include "errors.h"
 
+#define GLFW_FALSE 0
+
 namespace GameEngine {
 
 	InputManager Window::m_input;

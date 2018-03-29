@@ -30,7 +30,7 @@ namespace GameEngine{
     glBindVertexArray(0);
   }
 
-  Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize) : Quad(vertices, indices, vSize, iSize, glm::vec2(), glm::vec3(), 1.0f){}
+  Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, float scale) : Quad(vertices, indices, vSize, iSize, glm::vec2(), glm::vec3(), scale){}
 
   void Quad::setColor(glm::vec3 color){
     this->m_color = color;

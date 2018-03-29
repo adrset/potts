@@ -18,11 +18,11 @@ namespace GameEngine {
 		void updateVBO();
 		int index = 0;
 		void updateTransformations();
-		static const unsigned int BUFFER_INSTANCES = 10000;
-		static const unsigned int FLOATS_PER_INSTANCE = 19; // mat4 + vec3
+		static const unsigned int FLOATS_PER_INSTANCE = 20; // mat4 + vec3
 		std::vector <glm::vec3> m_positions;
 		std::vector <glm::vec3> m_colors;
-		std::vector<float> m_buffer[BUFFER_INSTANCES * FLOATS_PER_INSTANCE];
+		std::vector <glm::mat4> m_models;
+		float* m_buffer;
 		unsigned int m_instanceVBO;
 	};
 

@@ -18,21 +18,21 @@
 
 OS := $(shell uname -s)
 CC=g++ -std=c++17 -c -o
-CCO=g++ -std=c++17
+CCO=g++ -std=c++17 -o
 CFLAGS=-Wall
 CFLAGS_RELEASE=-Wall -O2
-LIBS_MAC=-lglfw -lm -lGLEW -lassimp -framework OpenGL
-LIBS=-lglfw -lm -lGLEW -lassimp
+LIBS_MAC=-lglfw -lm -lGLEW -framework OpenGL
+LIBS=-lglfw -lm -lGLEW -lGL
 TARGET = game
 
 $(TARGET): final 
 
 final: 
 ifeq ($(OS), Darwin)
-	$(CCO) -o gameBinary main.o Game.o GameEngine.a Potts.a $(LIBS_MAC) $(CFLAGS_RELEASE)
+	$(CCO) gameBinary main.o Game.o GameEngine.a Potts.a $(LIBS_MAC) $(CFLAGS_RELEASE)
 endif
 ifeq ($(OS), Linux)
-	$(CCO) -o gameBinary main.o Game.o -L. -l:GameEngine.a -:Potts.a $(LIBS) $(CFLAGS_RELEASE)
+	$(CCO) gameBinary main.o Game.o -L. -l:GameEngine.a -l:Potts.a $(LIBS) $(CFLAGS_RELEASE)
 else
 	$(Linux and Darwin supported!)
 

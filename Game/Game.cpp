@@ -1,12 +1,10 @@
 #include "Game.h"
-#include <GameEngine/Texture.h>
-#include <GameEngine/Quad.h>
-#include <GameEngine/stb_image.h>
 #include <GameEngine/QuadField.h>
 #include <vector>
 #include <cstdlib>
-#include <ctime>
-#include <cmath>
+
+#include <iostream>
+#include <unistd.h>
 bool firstMouse = true;
 
 // timing
@@ -83,9 +81,9 @@ void Game::loop() {
 		m_window->clear();
         lightingShader.setMat4("orthoMatrix", projection);
 		field.update(lightingShader);
-		/*for(auto* it: quads){
-			it->draw(lightingShader);
-		}*/
+		
+
+		//usleep(1000000);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

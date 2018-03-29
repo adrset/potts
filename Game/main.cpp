@@ -1,9 +1,15 @@
 #include <cstdlib>
+#include <string>
 #include "Game.h"
 
 int main(int argc, char** argv) {
 
-	if(argc < 6)
+	if(argc == 2 && !strcmp("help", argv[1])){
+		std::cout<< "Usage: ./binary <T> <cFactor> <n_spins> <dim_size> <screen_size_xy>" <<std::endl;
+		std::cout<< "For best visual results <dim_size> | <screen_size_xy>." <<std::endl;
+		return 0;
+	}
+	else if(argc < 6)
 		return 1;
 	// Assuming user is reasonable.
 	float t     = atof(argv [1]);

@@ -86,8 +86,8 @@ void Game::loop() {
         t=      j=      max=    min=
         t=      j=      max=    min=
     */
- std::cout << "scale" << m_width / m_size <<std::endl;
-	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, (float)m_width / m_size);
+ std::cout << "scale" << (float)m_width /(float)m_size <<std::endl;
+	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, ((float)m_width) / ((float)m_size));
 
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 

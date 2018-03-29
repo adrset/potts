@@ -5,13 +5,14 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
-
+#include <vector>
 namespace Potts {
 
 class MainMatrix{
 
 	//char ** matrix;	//pointer to the main square array of cells
-	char matrix[40][40];
+	//char matrix[40][40];
+	std::vector <char>* matrix;
 	int matrixSize;		//dimension of matrix
 
 	float temperature;
@@ -32,7 +33,7 @@ class MainMatrix{
     ~MainMatrix();
 	void MetropolisStep();	//does one step of calculation
 	int getMatrixSize() const {return matrixSize;};
-	int getSpin(int x, int y);
+	char getSpin(int x, int y);
 	void getSpinColor(int x, int y);
 };
 

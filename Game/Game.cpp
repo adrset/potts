@@ -14,7 +14,7 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
  // new int c++11 - uniform initialization var{ a}
-Game::Game(int width, int height, std::string title): m_width{width}, m_height(height), m_title(title)
+Game::Game(int width, int height, std::string title, float t, float cf, int n, int size): m_temp(t), m_cFactor(cf), m_n(n), m_size(size), m_width{width}, m_height(height), m_title(title)
 {
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
 	m_timer = new GameEngine::Timer(60);
@@ -55,26 +55,25 @@ void Game::loop() {
 
   	srand(time(NULL));
   	lightingShader.use();
+
 	glm::mat4 projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -10.0f, 10.00f);
 	lightingShader.setMat4("orthoMatrix", projection);
-
-	std::vector<GameEngine::Quad*> quads;
 
 	std::vector<glm::vec3> pos;
 	std::vector<glm::vec3> col;
 
 
-    float temperature       = 0.001;
+   /* float temperature       = 0.001;
     float couplingFactor    = 1;
-    float nSpins            = 12;
-    Potts::MainMatrix potts(40, temperature, couplingFactor, (nSpins), 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+    float nSpins            = 2;*/
+    Potts::MainMatrix potts(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
 
-	for(int i=0;i< 40; i++){
-		for(int j=0;j< 40; j++){
+    int offset = m_width / m_size;
+    std::cout << "Offset" << offset <<std::endl;
+	for(int i=0;i< m_size; i++){
+		for(int j=0;j< m_size; j++){
             float color = 0.3 * (float)potts.getSpin(i,j);
-			quads.push_back(new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(10*i, 10*j), glm::vec3(color, 0.2, 0.2), 10.0f));
-
-			pos.push_back(glm::vec3(10*i, 10*j, 0));
+			pos.push_back(glm::vec3(offset*i, offset*j, 0));
 			col.push_back(glm::vec3(color, 0.2, 0.2));
 		}
 	}
@@ -87,8 +86,8 @@ void Game::loop() {
         t=      j=      max=    min=
         t=      j=      max=    min=
     */
-
-	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, 10.0f);
+ std::cout << "scale" << m_width / m_size <<std::endl;
+	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, (float)m_width / m_size);
 
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 
@@ -108,14 +107,14 @@ void Game::loop() {
 		field.update(lightingShader);
 
 		//POTTS INTENSIFIES!!
-		for(int i=0;i<1600;i++){
+		for(int i=0;i<m_size * m_size;i++){
         	potts.MetropolisStep();
 		}
 
-        for(int i=0;i< 40; i++){
-            for(int j=0;j< 40; j++){
+        for(int i=0;i< m_size; i++){
+            for(int j=0;j< m_size; j++){
                 float color = 0.333 * potts.getSpin(i,j);
-                field.setColor(i*40+j, glm::vec3(0,color/2,color));
+                field.setColor(i*m_size+j, glm::vec3(0,color/2,color));
             }
         }
         //POTTS DEMINISHED :(
@@ -125,7 +124,7 @@ void Game::loop() {
 		glfwSwapBuffers(m_window->getWindowID());
 		glfwPollEvents();
 
-		std::cout << "FPS: " << 1.0/m_timer->end() << std::endl;
+		//std::cout << "FPS: " << 1.0/m_timer->end() << std::endl;
 	}
 
 	cleanUp();

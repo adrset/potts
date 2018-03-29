@@ -10,11 +10,15 @@
 class Game
 {
 public:
-	Game(int width, int height, std::string title);
+	Game(int width, int height, std::string title, float t, float cf, int n, int size);
 	~Game();
 	void cleanUp();
 	void start();
 private:
+	float m_temp;
+	float m_cFactor;
+	int m_n;
+	int m_size;
 	void processInput();
 	int m_width;
 	int m_height;

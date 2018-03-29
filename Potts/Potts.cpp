@@ -9,6 +9,7 @@ namespace Potts {
         maxState = maxSpin;
         minState = minSpin;
         states = maxState-minState;
+		matrix =  new std::vector <char> (matrixSize*matrixSize);
 //commented because arrays are fucked-up :(
 /*
         matrix = new char*[matrixSize];
@@ -31,11 +32,11 @@ namespace Potts {
     float MainMatrix::random01(){
         return (float)(rand()%100) / 100;
     }
-	int MainMatrix::getSpin(int x, int y){
-		return matrix[x][y];
+	char MainMatrix::getSpin(int x, int y){
+		return (*matrix)[x*matrixSize+y];
 	}
 	void MainMatrix::setSpin(int x,int y, char newSpin){
-		matrix[x][y] = newSpin;
+		(*matrix)[x*matrixSize+y] = newSpin;
 	}
 	int MainMatrix::validRandom(){
 		return 	rand()%matrixSize;

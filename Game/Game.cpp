@@ -14,10 +14,10 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
  // new int c++11 - uniform initialization var{ a}
-Game::Game(int width, int height, std::string title, float t, float cf, int n, int size): m_temp(t), m_cFactor(cf), m_n(n), m_size(size), m_width{width}, m_height(height), m_title(title)
+Game::Game(int width, int height, std::string title, float t, float cf, int n, int size,int fps): m_temp(t), m_cFactor(cf), m_n(n), m_size(size), m_width{width}, m_height(height), m_title(title)
 {
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
-	m_timer = new GameEngine::Timer(60);
+	m_timer = new GameEngine::Timer(fps);
 	lastX = m_width / 2.0f;
 	lastY = m_height / 2.0f;
 	//glm::vec3 pos, glm::vec3 amb, glm::vec3 dif, glm::vec3 spe, glm::vec3 clq
@@ -69,7 +69,7 @@ void Game::loop() {
    	m_potts = new Potts::MainMatrix(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
 
     int offset = m_width / m_size;
-    std::cout << "Offset" << offset <<std::endl;
+ 
 	for(int i=0;i< m_size; i++){
 		for(int j=0;j< m_size; j++){
             float color = 0.3 * (float)m_potts->getSpin(i,j);
@@ -92,6 +92,7 @@ void Game::loop() {
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
 
 
+	int fps=60;
 	// -----------
 
 	while (!m_window->shouldClose())
@@ -123,13 +124,17 @@ void Game::loop() {
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(m_window->getWindowID());
 		glfwPollEvents();
-		if(iter == 10){
+		fps = 1.0/m_timer->end();
+		
+		if(iter == 400){ // hardcoded :s
 			iter = 0;
-			std::cout << "FPS: " << 1.0/m_timer->end() << std::endl << "T: " << m_potts->getTemperature() << std::endl;;
+			std::cout << "FPS: " << fps << std::endl << "T: " << m_potts->getTemperature() << std::endl;;
 
 		}else{
 			iter++;
 		}
+
+		m_timer->wait();
 
 		
 	}

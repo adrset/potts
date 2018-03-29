@@ -2,6 +2,7 @@
 #define TIMER_H_
 #include <chrono>
 #include <ctime>
+#include <thread>
 
 namespace GameEngine{
 class Timer {
@@ -9,7 +10,7 @@ public:
   Timer(unsigned int fps);
   void start();
   double end();
-
+  void wait();
 private:
   unsigned int m_desiredFPS;
   double m_lastFrameDuration;

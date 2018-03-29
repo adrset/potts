@@ -10,7 +10,7 @@
 class Game
 {
 public:
-	Game(int width, int height, std::string title, float t, float cf, int n, int size);
+	Game(int width, int height, std::string title, float t, float cf, int n, int size, int fps);
 	~Game();
 	void cleanUp();
 	void start();

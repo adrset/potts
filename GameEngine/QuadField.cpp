@@ -31,13 +31,13 @@ namespace GameEngine {
 		    // Our structure (f is float) Buffer = { block_1 ([f,f,f,f], [f,f,f,f], [f,f,f,f], [f,f,f,f], [f,f,f,1.0f]) ... block_n(...)}
 		    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)0);
 		    glEnableVertexAttribArray(2); 
-		    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)(vec4Size));
+		    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)vec4Size));
 		    glEnableVertexAttribArray(3); 
-		    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)(2 * vec4Size));
+		    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(2 * vec4Size)));
 		    glEnableVertexAttribArray(4); 
-		    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)(3 * vec4Size));
+		    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(3 * vec4Size)));
 		    glEnableVertexAttribArray(5); 
-		    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)(4 * vec4Size));
+		    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(4 * vec4Size)));
 
 		    // 2nd argument 1 - move to another block after 1 instance
 		    glVertexAttribDivisor(1, 1);

@@ -66,13 +66,13 @@ void Game::loop() {
    /* float temperature       = 0.001;
     float couplingFactor    = 1;
     float nSpins            = 2;*/
-    Potts::MainMatrix potts(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+   	m_potts = new Potts::MainMatrix(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
 
     int offset = m_width / m_size;
     std::cout << "Offset" << offset <<std::endl;
 	for(int i=0;i< m_size; i++){
 		for(int j=0;j< m_size; j++){
-            float color = 0.3 * (float)potts.getSpin(i,j);
+            float color = 0.3 * (float)m_potts->getSpin(i,j);
 			pos.push_back(glm::vec3(offset*i, offset*j, 0));
 			col.push_back(glm::vec3(color, 0.2, 0.2));
 		}
@@ -86,7 +86,7 @@ void Game::loop() {
         t=      j=      max=    min=
         t=      j=      max=    min=
     */
- std::cout << "scale" << (float)m_width /(float)m_size <<std::endl;
+ 
 	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, ((float)m_width) / ((float)m_size));
 
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
@@ -108,12 +108,12 @@ void Game::loop() {
 
 		//POTTS INTENSIFIES!!
 		for(int i=0;i<m_size * m_size;i++){
-        	potts.MetropolisStep();
+        	m_potts->MetropolisStep();
 		}
 
         for(int i=0;i< m_size; i++){
             for(int j=0;j< m_size; j++){
-                float color = 0.333 * potts.getSpin(i,j);
+                float color = 0.333 * m_potts->getSpin(i,j);
                 field.setColor(i*m_size+j, glm::vec3(0,color/2,color));
             }
         }
@@ -123,8 +123,15 @@ void Game::loop() {
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(m_window->getWindowID());
 		glfwPollEvents();
+		if(iter == 10){
+			iter = 0;
+			std::cout << "FPS: " << 1.0/m_timer->end() << std::endl << "T: " << m_potts->getTemperature() << std::endl;;
 
-		//std::cout << "FPS: " << 1.0/m_timer->end() << std::endl;
+		}else{
+			iter++;
+		}
+
+		
 	}
 
 	cleanUp();
@@ -135,6 +142,10 @@ void Game::processInput()
 {
 	if(m_window->m_input.isKeyPressed(GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(m_window->getWindowID(), true);
+	if(m_window->m_input.isKeyPressed(GLFW_KEY_1))
+		m_potts->adjustTemperature(0.01f);
+	if(m_window->m_input.isKeyPressed(GLFW_KEY_2))
+		m_potts->adjustTemperature(-0.01f);
 }
 
 

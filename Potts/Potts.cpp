@@ -38,6 +38,11 @@ namespace Potts {
 	void MainMatrix::setSpin(int x,int y, char newSpin){
 		(*matrix)[x*matrixSize+y] = newSpin;
 	}
+
+	void MainMatrix::adjustTemperature(float dT){
+		this->temperature += dT;
+
+	}
 	int MainMatrix::validRandom(){
 		return 	rand()%matrixSize;
 	}

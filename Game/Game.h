@@ -15,6 +15,8 @@ public:
 	void cleanUp();
 	void start();
 private:
+	unsigned int iter = 0;
+	Potts::MainMatrix* m_potts;
 	float m_temp;
 	float m_cFactor;
 	int m_n;

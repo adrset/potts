@@ -35,6 +35,8 @@ class MainMatrix{
 	int getMatrixSize() const {return matrixSize;};
 	char getSpin(int x, int y);
 	void getSpinColor(int x, int y);
+	void adjustTemperature(float dT);
+	float getTemperature() const { return this-> temperature; }
 };
 
 

@@ -18,7 +18,7 @@ namespace GameEngine {
 			glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
 
 			// Send information about data size (amount * FLOATS_PER_INSTANCE * 4 ) in bytes, and tell that we will provide data in future (nullptr)
-			glBufferData(GL_ARRAY_BUFFER, m_positions.size() * 4 * FLOATS_PER_INSTANCE, nullptr, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, m_positions.size() * 4 * FLOATS_PER_INSTANCE, nullptr, GL_STREAM_DRAW);
   
   			// Bind VAO in order to add some attributes into it
 		    glBindVertexArray(VAO);
@@ -49,6 +49,11 @@ namespace GameEngine {
 			// Just for safety unbind vao after editions
 		    glBindVertexArray(0);
 
+		}
+
+		QuadField::~QuadField(){
+			delete[] m_buffer;
+			glDeleteBuffers(1, &m_instanceVBO);
 		}
 
 		void QuadField::update(Shader& shader){
@@ -128,7 +133,8 @@ namespace GameEngine {
 
 		void QuadField::updateVBO(){
 			glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
-			glBufferData(GL_ARRAY_BUFFER, m_positions.size() * 4 * FLOATS_PER_INSTANCE, nullptr, GL_STATIC_DRAW);
+			//glBufferData(GL_ARRAY_BUFFER, m_positions.size() * 4 * FLOATS_PER_INSTANCE, nullptr, GL_STATIC_DRAW);
+			// Send data to GPU
 			glBufferSubData(GL_ARRAY_BUFFER, 0, m_positions.size() *  4 * FLOATS_PER_INSTANCE,  m_buffer);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}

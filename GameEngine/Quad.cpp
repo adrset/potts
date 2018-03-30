@@ -31,6 +31,12 @@ namespace GameEngine{
   }
 
   Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, float scale) : Quad(vertices, indices, vSize, iSize, glm::vec2(), glm::vec3(), scale){}
+ 
+  Quad::~Quad(){
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+  }
 
   void Quad::setColor(glm::vec3 color){
     this->m_color = color;

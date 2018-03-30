@@ -1,8 +1,8 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in mat4 model;
-layout (location = 5) in vec3 color;
-out vec3 out_color;
+layout (location = 5) in vec4 color;
+out vec4 out_color;
 uniform mat4 orthoMatrix;
 
 void main()

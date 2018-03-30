@@ -161,5 +161,7 @@ void Game::cleanUp() {
 
 Game::~Game()
 {
+	delete m_window;
+	delete m_timer;
 	std::cout << "Closing game." << std::endl;
 }

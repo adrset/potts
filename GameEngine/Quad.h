@@ -12,6 +12,7 @@ namespace GameEngine{
   public:
     Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, float scale);
     Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, glm::vec2 position, glm::vec3 color, float scale);
+    ~Quad();
     glm::vec2 getPosition() const { return m_position; }
     float getScale() const { return m_scale; }
     glm::vec3 getColor() const { return m_color; }

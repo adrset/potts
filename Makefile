@@ -27,12 +27,11 @@ $(TARGET):
 	+$(MAKE) -C Game
 	+$(MAKE) -C build
 
+.PHONY: all $(TARGET) clean
+
 clean:
 				rm -f GameEngine/*.o Game/*.o build/*.o
 				rm -f GameEngine/*.a Game/*.a build/*.a
 				rm -f GameEngine/*.gch Game/*.gch build/*.gch
-run:
-				cd build && ./gameBinary
-				cd ..
 
 

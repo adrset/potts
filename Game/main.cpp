@@ -22,8 +22,10 @@ int main(int argc, char** argv) {
     	fps = atoi(argv[6]) == 0 ? 60 : atoi(argv[6]);
     }
 
-    std::cout<< t << " " << cf << " " << n << " " << size <<std::endl;
 	Game* game = new Game(dim, dim, "Potts", t, cf, n, size, fps);
 	game->start();
+
+	delete game;
+
 	return 0;
 }

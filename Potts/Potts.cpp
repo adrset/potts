@@ -9,25 +9,18 @@ namespace Potts {
         maxState = maxSpin;
         minState = minSpin;
         states = maxState-minState;
+
 		matrix =  new std::vector <char> (matrixSize*matrixSize);
-//commented because arrays are fucked-up :(
-/*
-        matrix = new char*[matrixSize];
-        for(int i=0; i<matrixSize ; i++){
-                matrix[i] = new char[matrixSize];
-        }
-*/
 
-        for(int x=0 ; x<matrixSize ; x++){
-            for(int y=0 ; y<matrixSize ; y++){
+        for(int x=0 ; x<matrixSize ; x++)
+            for(int y=0 ; y<matrixSize ; y++)
                 setSpin(x,y, getRandomSpin() );
-            }
-
-        }
+          
 
 
 	}
     MainMatrix::~MainMatrix(){
+    	delete matrix;
     }
     float MainMatrix::random01(){
         return (float)(rand()%100) / 100;
@@ -85,7 +78,6 @@ namespace Potts {
                 setSpin(x,y,newSpin);
         }
         //if we do not have luck the spin stays the same
-		//printf("hej");
 	}
 	void MainMatrix::getSpinColor(int x, int y){
 

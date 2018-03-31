@@ -10,13 +10,17 @@ namespace GameEngine {
 
 	void Window::clear(){
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 	
 	}
 
 	void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	{
 		(action != GLFW_RELEASE) ? m_input.pressMouseKey(button) : m_input.releaseMouseKey(button);
+	}
+
+	void Window::swapBuffers(){
+		glfwSwapBuffers(m_window);
 	}
 
 	void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -38,10 +42,55 @@ namespace GameEngine {
 		std::cout << "Deleting window" << std::endl;
 	}
 
+	Window::Window(int width, int height, std::string title, GLFWwindow* window):infos(width, height, title){
+
+
+	if (!glfwInit())
+		{
+			glfwTerminate();
+			fatalError("Could not init GLFW");
+		}
+
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
+#ifdef __APPLE__
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwSetErrorCallback(glfwError);
+
+		m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, window);
+
+		if (!m_window)
+		{
+			closeWindow();
+			fatalError("Could not create window!");
+		}
+
+		glewExperimental = GL_TRUE;
+
+		if (glewInit() != 0.0) {
+			fatalError("Failed to initialize GLEW!");
+		}
+
+		const GLFWvidmode* vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		glfwSetWindowPos(m_window, (int)(0.5 * (vidmode->width - width)), int((0.5*(vidmode->height - height))));
+
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetKeyCallback(m_window, key_callback);
+		glfwSetCursorPosCallback(m_window, cursor_position_callback);
+		glfwSetScrollCallback(m_window, scroll_callback);
+		glfwSetMouseButtonCallback(m_window, mouse_button_callback);
+	}
+
+	void Window::makeContextCurrent(){
+		glfwMakeContextCurrent(m_window);
+	}
+
 	Window::Window(int width, int height, std::string title):infos(width, height, title){
 
-		
-
+	
 		if (!glfwInit())
 		{
 			glfwTerminate();
@@ -65,16 +114,13 @@ namespace GameEngine {
 			fatalError("Could not create window!");
 		}
 
-		glfwMakeContextCurrent(m_window);
+		makeContextCurrent();
 
-		//glfwSwapInterval(0);
 		glewExperimental = GL_TRUE;
 
 		if (glewInit() != 0.0) {
 			fatalError("Failed to initialize GLEW!");
 		}
-
-		glfwSwapInterval(0);
 
 		const GLFWvidmode* vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(m_window, (int)(0.5 * (vidmode->width - width)), int((0.5*(vidmode->height - height))));

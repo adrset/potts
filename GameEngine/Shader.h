@@ -20,6 +20,7 @@ namespace GameEngine {
 
 		// constructor reads and builds the shader
 		Shader(const char* vertexPath, const char* fragmentPath);
+		Shader(){ fprintf(stderr, "%s\n", "Creating empt shader!");}
 		// use/activate the shader
 		void use();
 		// utility uniform functions

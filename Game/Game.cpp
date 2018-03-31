@@ -1,6 +1,5 @@
 #include "Game.h"
 
-#include <GameEngine/QuadField.h>
 #include <vector>
 #include <cstdlib>
 #include <fstream>
@@ -20,25 +19,12 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 	m_timer = new GameEngine::Timer(fps);
 	lastX = m_width / 2.0f;
 	lastY = m_height / 2.0f;
-	//glm::vec3 pos, glm::vec3 amb, glm::vec3 dif, glm::vec3 spe, glm::vec3 clq
-		// spotLight
-	//loop will be probably public soon
-}
-
-void Game::start(){
-	loop();
-}
-
-void Game::loop() {
-
+	
 	srand(time(NULL));
-	// configure global opengl state
-	// -----------------------------
-	glEnable(GL_DEPTH_TEST);
 
 	// build and compile our shader zprogram
 	// ------------------------------------
-	GameEngine::Shader lightingShader("2dshader.vs", "2dshader.fs");
+	m_shader = new GameEngine::Shader("2dshader.vs", "2dshader.fs");
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
   // ------------------------------------------------------------------
@@ -54,10 +40,10 @@ void Game::loop() {
   };
 
   	srand(time(NULL));
-  	lightingShader.use();
+  	m_shader->use();
 
-	glm::mat4 projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -10.0f, 10.00f);
-	lightingShader.setMat4("orthoMatrix", projection);
+	m_projection = glm::ortho(0.0f, (GLfloat)m_width, (GLfloat)m_height, 0.0f, -10.0f, 10.00f);
+	m_shader->setMat4("orthoMatrix", m_projection);
 
 	std::vector<glm::vec3> pos;
 	std::vector<glm::vec3> col;
@@ -87,27 +73,62 @@ void Game::loop() {
         t=      j=      max=    min=
     */
  
-	GameEngine::QuadField field(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, ((float)m_width) / ((float)m_size));
+	m_field = new GameEngine::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, ((float)m_width) / ((float)m_size));
 
 	//GameEngine::Quad* quad = new GameEngine::Quad(vertices, indices, sizeof(vertices), sizeof(indices), glm::vec2(100), glm::vec3(0.4, 0.1, 0.7), 100.0f);
+	//m_graphWindow = new GameEngine::Window(m_width, m_height, "sec", m_window->getWindowID());
 
+	
+}
 
-	int fps=60;
-	// -----------
+void Game::start(){
+	loop();
+}
+
+void Game::loop() {
 
 	while (!m_window->shouldClose())
 	{
 		m_timer->start();
-
 		processInput();
+
+		// First window
 
 		// render
 		// ------
-		m_window->clear();
-        lightingShader.setMat4("orthoMatrix", projection);
-		field.update(lightingShader);
 
-		//POTTS INTENSIFIES!!
+		m_window->clear();
+		
+        m_shader->setMat4("orthoMatrix", m_projection);
+
+		m_field->update(m_shader);
+
+       	gameLogic();
+
+		m_window->swapBuffers();
+
+		glfwPollEvents();
+
+		waitAndShoutFPS();
+	
+		
+	}
+
+	cleanUp();
+
+}
+
+void Game::waitAndShoutFPS(){
+		int fps = 1.0/m_timer->end();
+
+		std::cout << "FPS: " << fps << std::endl << "T: " << m_potts->getTemperature() << std::endl;;
+
+		m_timer->wait();
+
+}
+
+void Game::gameLogic(){
+	//POTTS INTENSIFIES!!
 		for(int i=0;i<m_size * m_size;i++){
         	m_potts->MetropolisStep();
 		}
@@ -115,32 +136,9 @@ void Game::loop() {
         for(int i=0;i< m_size; i++){
             for(int j=0;j< m_size; j++){
                 float color = 0.333 * m_potts->getSpin(i,j);
-                field.setColor(i*m_size+j, glm::vec3(0,color/2,color));
+                m_field->setColor(i*m_size+j, glm::vec3(0,color/2,color));
             }
         }
-        //POTTS DEMINISHED :(
-
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
-		glfwSwapBuffers(m_window->getWindowID());
-		glfwPollEvents();
-		fps = 1.0/m_timer->end();
-		
-		if(iter == 400){ // hardcoded :s
-			iter = 0;
-			std::cout << "FPS: " << fps << std::endl << "T: " << m_potts->getTemperature() << std::endl;;
-
-		}else{
-			iter++;
-		}
-
-		m_timer->wait();
-
-		
-	}
-
-	cleanUp();
-
 }
 
 void Game::processInput()
@@ -151,6 +149,8 @@ void Game::processInput()
 		m_potts->adjustTemperature(0.01f);
 	if(m_window->m_input.isKeyPressed(GLFW_KEY_2))
 		m_potts->adjustTemperature(-0.01f);
+	//if(m_window->m_input.isKeyPressed(GLFW_KEY_C))
+		//m_graphWindow->makeContextCurrent();
 }
 
 

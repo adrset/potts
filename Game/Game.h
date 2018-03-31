@@ -7,6 +7,7 @@
 #include <GameEngine/Window.h>
 #include <GameEngine/Shader.h>
 #include <GameEngine/Timer.h>
+#include <GameEngine/QuadField.h>
 class Game
 {
 public:
@@ -14,7 +15,12 @@ public:
 	~Game();
 	void cleanUp();
 	void start();
+	void gameLogic();
+	void waitAndShoutFPS();
 private:
+	glm::mat4 m_projection;
+	GameEngine::Shader* m_shader;
+	GameEngine::QuadField* m_field;
 	unsigned int iter = 0;
 	Potts::MainMatrix* m_potts;
 	float m_temp;
@@ -26,6 +32,7 @@ private:
 	int m_height;
 	std::string m_title;
 	GameEngine::Window* m_window;
+	//GameEngine::Window* m_graphWindow;
 	GameEngine::Timer* m_timer;
 	float lastX;
 	float lastY;

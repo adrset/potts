@@ -56,9 +56,9 @@ namespace GameEngine {
 			glDeleteBuffers(1, &m_instanceVBO);
 		}
 
-		void QuadField::update(Shader& shader){
+		void QuadField::update(Shader* shader){
 			// Use our shader
-			shader.use();
+			shader->use();
 
 			// Enable vertex attributes and use VAO
 			prepare();

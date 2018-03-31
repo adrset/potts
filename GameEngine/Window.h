@@ -30,10 +30,10 @@ namespace GameEngine {
 			info(int w, int h, std::string t) : width(w), height(h), title(t) {};
 		} infos;
 
-		
-
 
 	public:
+		void makeContextCurrent();
+		void swapBuffers();
 		void clear();
 		bool shouldClose() const { return glfwWindowShouldClose (m_window);}
 		struct info getInfo() const { return infos; }
@@ -41,6 +41,7 @@ namespace GameEngine {
 		GLFWwindow* getWindowID() const { return m_window; }
 		void closeWindow();
 		Window(int width, int height, std::string title);
+		Window(int width, int height, std::string title, GLFWwindow* window);
 		~Window();
 	};
 

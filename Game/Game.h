@@ -8,6 +8,8 @@
 #include <GameEngine/Shader.h>
 #include <GameEngine/Timer.h>
 #include <GameEngine/QuadField.h>
+#include <nanovg/nanovg.h>
+
 class Game
 {
 public:
@@ -21,7 +23,6 @@ private:
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_shader;
 	GameEngine::QuadField* m_field;
-	GameEngine::QuadField* m_field2;
 	unsigned int iter = 0;
 	Potts::MainMatrix* m_potts;
 	float m_temp;
@@ -31,6 +32,7 @@ private:
 	void processInput();
 	int m_width;
 	int m_height;
+	NVGcontext* m_vg = nullptr;
 	std::string m_title;
 	GameEngine::Window* m_window2;
 	GameEngine::Window* m_window;

@@ -36,6 +36,7 @@ namespace GameEngine {
 		static bool initialized;
 		static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	public:
+		int getFramebufferPixelRatio() const;
 		info getWindowPosition();
 		void changePosition(int x, int y);
 		void makeContextCurrent();

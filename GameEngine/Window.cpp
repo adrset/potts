@@ -28,11 +28,12 @@ namespace GameEngine {
 			glfwSetErrorCallback(glfwError);
 
 			initialized = true;
+
 		}
 	}
 	void Window::clear(){
-		glClearColor(0.1f, 0.4f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	}
 
@@ -74,6 +75,11 @@ namespace GameEngine {
 
 	void Window::makeContextCurrent(){
 		glfwMakeContextCurrent(this->m_window);
+	}
+	int Window::getFramebufferPixelRatio() const{
+		int fbWidth, fbHeight;
+		glfwGetFramebufferSize(getWindowID(), &fbWidth, &fbHeight);
+		return (float)fbWidth / (float)fbHeight;
 	}
 
 	Window::Window(int width, int height, std::string title, GLFWwindow* window):infos(width, height, title, 0, 0){

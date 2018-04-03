@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <map>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "errors.h"

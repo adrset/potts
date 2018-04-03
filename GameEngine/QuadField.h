@@ -5,13 +5,14 @@
 #include "Quad.h"
 
 namespace GameEngine {
-	
+
 	class QuadField : public Quad {
 	public:
 		QuadField(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, std::vector<glm::vec3> positions, std::vector<glm::vec3> colors,
 		 float scale);
 		~QuadField();
 		void update(Shader* shader);
+		void draw();
 		void addInstanceAttribute(int vao, int vbo, int attribute, int dataSize, int dataLength, int offset);
 		void prepare();
 		void setColor(int i, glm::vec3 col);

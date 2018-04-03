@@ -3,17 +3,23 @@
 # Date: 10-08-2017
 
 CC=g++ -std=c++1z -c -o
-CFLAGS=-Wall -O2
-CFLAGS_RELEASE=-Wall -O2
+CFLAGS=-Wall -O2 -I../include/
+CFLAGS_RELEASE=-Wall -O2 -I../include/
 LIBS=
 
 # Converts all objects into one GameEnigne lib
-GameEngine.a: errors.o InputManager.o Shader.o Window.o Quad.o Renderable.o QuadField.o Timer.o
+GameEngine.a: errors.o InputManager.o Shader.o Window.o Quad.o Renderable.o QuadField.o Timer.o glad.o nanovg.o
 	ar rcs $@ $^
 	mv GameEngine.a ../build
 
 Renderable.o: Renderable.cpp Renderable.h
 	$(CC) $@ $< $(LIBS) $(CFLAGS)
+
+glad.o: glad.c
+			$(CC) -c $< -o $@ $(INC) $(CFLAGS)
+
+nanovg.o: nanovg.c
+				$(CC) -c $< -o $@ $(INC) $(CFLAGS)
 
 QuadField.o: QuadField.cpp QuadField.h
 	$(CC) $@ $< $(LIBS) $(CFLAGS)

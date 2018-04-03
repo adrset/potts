@@ -7,7 +7,7 @@ CCO=g++ -std=c++17
 CFLAGS=-Wall
 CFLAGS_RELEASE=-Wall -O2
 LIBS=-lglfw -lm -lGLEW -lGLU -lGL -lassimp
-INC=-I../
+INC=-I../ -I../include/
 TARGET = game
 
 $(TARGET): main.o Game.o move
@@ -18,15 +18,14 @@ main.o: main.cpp
 Game.o: Game.cpp
 	$(CC) -c $< -o $@ $(INC) $(CFLAGS_RELEASE)
 
-move: 
+
+move:
 	mv Game.o ../build
 	mv main.o ../build
 
-# Cleanup 
+# Cleanup
 
 clean:
 				rm -f *.o
 				rm -f *.a
 				rm -f *.gch
-	
-

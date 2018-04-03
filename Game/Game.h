@@ -21,6 +21,7 @@ private:
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_shader;
 	GameEngine::QuadField* m_field;
+	GameEngine::QuadField* m_field2;
 	unsigned int iter = 0;
 	Potts::MainMatrix* m_potts;
 	float m_temp;
@@ -31,8 +32,8 @@ private:
 	int m_width;
 	int m_height;
 	std::string m_title;
+	GameEngine::Window* m_window2;
 	GameEngine::Window* m_window;
-	//GameEngine::Window* m_graphWindow;
 	GameEngine::Timer* m_timer;
 	float lastX;
 	float lastY;

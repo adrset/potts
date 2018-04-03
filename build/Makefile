@@ -10,10 +10,10 @@
 #		glm - OpenGL mathematics library.
 #		assimp - 3D object loader and more.
 #
-# Explaination: 
+# Explaination:
 # $@ means the target
 # $^ means all prerequisites
-# $< means only the first prerequisite    
+# $< means only the first prerequisite
 
 
 OS := $(shell uname -s)
@@ -22,12 +22,12 @@ CCO=g++ -std=c++17 -o
 CFLAGS=-Wall
 CFLAGS_RELEASE=-Wall -O2
 LIBS_MAC=-lglfw -lm -lGLEW -framework OpenGL
-LIBS=-lglfw -lm -lGLEW -lGL
+LIBS=-lglfw -lm -lGLEW -lGL -ldl
 TARGET = game
 
-$(TARGET): final 
+$(TARGET): final
 
-final: 
+final:
 ifeq ($(OS), Darwin)
 	$(CCO) gameBinary main.o Game.o GameEngine.a Potts.a $(LIBS_MAC) $(CFLAGS_RELEASE)
 endif
@@ -41,5 +41,3 @@ clean:
 				rm -f *.o
 				rm -f *.a
 				rm -f *.gch
-	
-

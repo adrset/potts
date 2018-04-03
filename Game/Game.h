@@ -23,7 +23,6 @@ private:
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_shader;
 	GameEngine::QuadField* m_field;
-	unsigned int iter = 0;
 	Potts::MainMatrix* m_potts;
 	float m_temp;
 	float m_cFactor;

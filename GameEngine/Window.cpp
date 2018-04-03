@@ -6,7 +6,6 @@
 
 namespace GameEngine {
 
-	InputManager Window::m_input;
 	bool Window::initialized = false;
 	void Window::init(){
 		if(!initialized){
@@ -39,7 +38,7 @@ namespace GameEngine {
 
 	void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	{
-		(action != GLFW_RELEASE) ? m_input.pressMouseKey(button) : m_input.releaseMouseKey(button);
+		(action != GLFW_RELEASE) ? InputManager::pressMouseKey(button) : InputManager::releaseMouseKey(button);
 	}
 
 	void Window::swapBuffers(){
@@ -55,17 +54,17 @@ namespace GameEngine {
 
 	void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
-		m_input.addScroll(glm::vec2(xoffset, yoffset));
+		InputManager::addScroll(glm::vec2(xoffset, yoffset));
 	}
 
 	void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		(action != GLFW_RELEASE) ? m_input.pressKey(key) : m_input.releaseKey(key);
+		(action != GLFW_RELEASE) ? InputManager::pressKey(key) : InputManager::releaseKey(key);
 	}
 
 	void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
-		m_input.setMouseCoords((float)xpos, (float)ypos);
+		InputManager::setMouseCoords((float)xpos, (float)ypos, (void*) window);
 	}
 
 	bool Window::terminated = false;

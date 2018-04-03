@@ -8,6 +8,7 @@
 #include <unistd.h>
 #define NANOVG_GL3_IMPLEMENTATION
 #include <nanovg/nanovg_gl.h>
+#include <GameEngine/Button.h>
 
  // new int c++11 - uniform initialization var{ a}
 Game::Game(int width, int height, std::string title, float t, float cf, int n, int size,int fps): m_temp(t), m_cFactor(cf), m_n(n), m_size(size), m_width{width}, m_height(height), m_title(title)
@@ -104,6 +105,11 @@ void Game::start(){
 
 void Game::loop() {
 	NVGpaint bg;
+	int a = 0;
+	GameEngine::Button b(200, 200, 100, 100, 10, [&](void) {// [=] pass all variables from outside by val
+		m_potts->adjustTemperature(-0.01f);
+	});
+	b.setColors(nvgRGBA(121,31,12,255), nvgRGBA(231,121,3,255));
 	while (!m_window->shouldClose() && !m_window2->shouldClose())
 	{
 		m_timer->start();
@@ -112,7 +118,7 @@ void Game::loop() {
 
 		m_window->clear();
 
-    m_shader->setMat4("orthoMatrix", m_projection);
+  	  m_shader->setMat4("orthoMatrix", m_projection);
 
 		m_field->update(m_shader);
 
@@ -125,17 +131,32 @@ void Game::loop() {
 		nvgBeginFrame(m_vg, m_window2->getInfo().width, m_window2->getInfo().height, m_window2->getFramebufferPixelRatio());
 
 		nvgBeginPath(m_vg);
-		bg = nvgLinearGradient(m_vg, 0,0,0,800, nvgRGBA(12,12,255,16), nvgRGBA(0,0,0,16));
+
+		b.draw(m_vg);
+		if(b.isMouseOver(GameEngine::InputManager::getMouseCoords().xy.x, GameEngine::InputManager::getMouseCoords().xy.y) 
+			&& GameEngine::InputManager::isMouseKeyPressed(GLFW_MOUSE_BUTTON_1)){
+			b.click();
+		}
+
+		bg = nvgLinearGradient(m_vg, 0,0,0,800, nvgRGBA(255,255,255,16), nvgRGBA(0,0,0,16));
 		nvgFillPaint(m_vg, bg);
 		nvgRect(m_vg, 0,0, 800,800);
 		nvgFill(m_vg);
 
+		nvgFillColor(m_vg, nvgRGBA(255,255,255,255));
 		nvgFontSize(m_vg, 42.0f);
 		nvgFontFace(m_vg, "sans");
-		nvgFillColor(m_vg, nvgRGBA(123,13,255,255));
-		nvgTextAlign(m_vg,NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
-		nvgText(m_vg, 55.f, 12.55f, ("FPS: " + std::to_string(m_fps)).c_str(), NULL);
-
+		//SssnvgTextAlign(m_vg,NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
+		nvgText(m_vg, 0.f,42.0f, ("FPS: " + std::to_string(m_fps)).c_str(), NULL);
+		nvgText(m_vg, 0.f,72.0f, ("T: " + std::to_string(m_potts->getTemperature())).c_str(), NULL);
+		std::string windowID;
+		if((GLFWwindow*)GameEngine::InputManager::getMouseCoords().window == m_window2->getWindowID()){
+			windowID = m_window2->getInfo().title;
+		}else{
+			windowID = m_window->getInfo().title;
+		}
+		nvgText(m_vg, 0.f,102.0f, ("Window: " + windowID).c_str(), NULL);
+		nvgText(m_vg, 0.f,132.0f, ("X: " + std::to_string((int)GameEngine::InputManager::getMouseCoords().xy.x)).c_str(), NULL);
 		nvgEndFrame(m_vg);
 
 		m_window->swapBuffers();
@@ -175,11 +196,11 @@ void Game::gameLogic(){
 
 void Game::processInput()
 {
-	if(m_window->m_input.isKeyPressed(GLFW_KEY_ESCAPE))
+	if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(m_window->getWindowID(), true);
-	if(m_window->m_input.isKeyPressed(GLFW_KEY_1))
+	if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_1))
 		m_potts->adjustTemperature(0.01f);
-	if(m_window->m_input.isKeyPressed(GLFW_KEY_2))
+	if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_2))
 		m_potts->adjustTemperature(-0.01f);
 }
 

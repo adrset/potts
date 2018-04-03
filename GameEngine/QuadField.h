@@ -12,7 +12,7 @@ namespace GameEngine {
 		 float scale);
 		~QuadField();
 		void update(Shader* shader);
-		void draw();
+		void drawNoUpdate();
 		void addInstanceAttribute(int vao, int vbo, int attribute, int dataSize, int dataLength, int offset);
 		void prepare();
 		void setColor(int i, glm::vec3 col);

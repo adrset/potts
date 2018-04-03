@@ -2,14 +2,15 @@
 
 namespace GameEngine {
 
-	InputManager::InputManager() :m_mouseCoords(0) {
+	MouseCoords InputManager::m_mCoords(glm::vec2(), nullptr);
+	glm::vec2 InputManager::m_scroll;
+	std::unordered_map<unsigned int, bool> InputManager::m_mouseKeyMap;
+	std::unordered_map<unsigned int, bool> InputManager::m_previousMouseKeyMap;
+	std::unordered_map<unsigned int, bool> InputManager::m_keyMap;
+	std::unordered_map<unsigned int, bool> InputManager::m_previousKeyMap;
 
-	}
-
-	InputManager::~InputManager() {
-
-	}
 	void InputManager::update() {
+
 
 		for (auto& it : m_keyMap) {
 			m_previousKeyMap[it.first] = it.second;
@@ -26,10 +27,12 @@ namespace GameEngine {
 		m_keyMap[keyID] = false;
 	}
 
-	void InputManager::setMouseCoords(float x, float y) {
-		m_mouseCoords.x = x;
-		m_mouseCoords.y = y;
+	void InputManager::setMouseCoords(float x, float y, void* window) {
+		m_mCoords.xy.x = x;
+		m_mCoords.xy.y = y;
+		m_mCoords.window = window;
 	}
+
 	bool InputManager::isKeyDown(unsigned int keyID) {
 		auto it = m_keyMap.find(keyID);
 		if (it != m_keyMap.end()) {
@@ -59,7 +62,7 @@ namespace GameEngine {
 			return false;
 		}
 	}
-	
+
 
 	void InputManager::pressMouseKey(unsigned int keyID) {
 		m_mouseKeyMap[keyID] = true;
@@ -80,7 +83,7 @@ namespace GameEngine {
 	}
 
 	void InputManager::addScroll(glm::vec2 scroll) {
-		this->m_scroll += scroll;
+		m_scroll += scroll;
 	}
 
 	bool InputManager::isMouseKeyPressed(unsigned int keyID)

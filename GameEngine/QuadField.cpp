@@ -74,13 +74,13 @@ namespace GameEngine {
 			updateVBO();
 
 			// Eventually draw our instanced quads
-			draw();
+			drawNoUpdate();
 
 			// Disable vertex attributes
 			stop();
 		}
 
-		void QuadField::draw(){
+		void QuadField::drawNoUpdate(){
 				glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0,
 				m_positions.size());
 		}

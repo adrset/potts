@@ -20,7 +20,7 @@ OS := $(shell uname -s)
 CC=g++ -std=c++17 -c -o
 CCO=g++ -std=c++17 -o
 CFLAGS=-Wall
-CFLAGS_RELEASE=-Wall -O2
+CFLAGS_RELEASE=-Wall -O3
 LIBS_MAC=-lglfw -lm -lGLEW -framework OpenGL
 LIBS=-lglfw -lm -lGLEW -lGL -ldl
 TARGET = game

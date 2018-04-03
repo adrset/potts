@@ -10,12 +10,16 @@ namespace Potts {
         minState = minSpin;
         states = maxState-minState;
 
+        for(int i=0;i<maxSpin;i++){
+          colors.push_back(Color(255/maxSpin * (i+1), 255/maxSpin * (maxSpin -i), 255/maxSpin * ((maxSpin+2*i) % maxSpin)));
+        }
+
 		matrix =  new std::vector <char> (matrixSize*matrixSize);
 
         for(int x=0 ; x<matrixSize ; x++)
             for(int y=0 ; y<matrixSize ; y++)
                 setSpin(x,y, getRandomSpin() );
-          
+
 
 
 	}

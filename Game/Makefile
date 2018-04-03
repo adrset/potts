@@ -5,7 +5,7 @@
 CC=g++ -std=c++1z -c -o
 CCO=g++ -std=c++17
 CFLAGS=-Wall
-CFLAGS_RELEASE=-Wall -O2
+CFLAGS_RELEASE=-Wall -O3
 LIBS=-lglfw -lm -lGLEW -lGLU -lGL -lassimp
 INC=-I../ -I../include/
 TARGET = game

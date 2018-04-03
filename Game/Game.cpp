@@ -26,6 +26,11 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 	if (m_vg == NULL) {
 		printf("Could not init nanovg.\n");
 	}
+
+	fontNormal = nvgCreateFont(m_vg, "sans", "Roboto-Regular.ttf");
+		if (fontNormal == -1) {
+			printf("Could not add font italic.\n");
+	}
 	m_window->makeContextCurrent();
 
 	m_timer = new GameEngine::Timer(fps);
@@ -125,6 +130,12 @@ void Game::loop() {
 		nvgRect(m_vg, 0,0, 800,800);
 		nvgFill(m_vg);
 
+		nvgFontSize(m_vg, 42.0f);
+		nvgFontFace(m_vg, "sans");
+		nvgFillColor(m_vg, nvgRGBA(123,13,255,255));
+		nvgTextAlign(m_vg,NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
+		nvgText(m_vg, 55.f, 12.55f, ("FPS: " + std::to_string(m_fps)).c_str(), NULL);
+
 		nvgEndFrame(m_vg);
 
 		m_window->swapBuffers();
@@ -142,9 +153,7 @@ void Game::loop() {
 }
 
 void Game::waitAndShoutFPS(){
-		int fps = 1.0/m_timer->end();
-
-		std::cout << "FPS: " << fps << std::endl << "T: " << m_potts->getTemperature() << std::endl;;
+		m_fps = 1.0/m_timer->end();
 
 		m_timer->wait();
 
@@ -158,8 +167,8 @@ void Game::gameLogic(){
 
         for(int i=0;i< m_size; i++){
             for(int j=0;j< m_size; j++){
-                float color = 0.333 * m_potts->getSpin(i,j);
-                m_field->setColor(i*m_size+j, glm::vec3(0,color/2,color));
+                int color = m_potts->getSpin(i,j);
+                m_field->setColor(i*m_size+j, glm::normalize(glm::vec3(m_potts->getColor(color).r,m_potts->getColor(color).g,m_potts->getColor(color).b)));
             }
         }
 }

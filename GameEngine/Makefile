@@ -3,7 +3,7 @@
 # Date: 10-08-2017
 
 CC=g++ -std=c++1z -c -o
-CFLAGS=-Wall -O2 -I../include/
+CFLAGS=-Wall -O3 -I../include/
 CFLAGS_RELEASE=-Wall -O2 -I../include/
 LIBS=
 

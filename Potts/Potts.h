@@ -8,11 +8,20 @@
 #include <vector>
 namespace Potts {
 
+typedef struct Color{
+		char r;
+		char g;
+		char b;
+		Color(int rc, int gc, int bc) : r(rc), g(gc), b(bc){};
+
+	} Color;
+
 class MainMatrix{
 
 	//char ** matrix;	//pointer to the main square array of cells
 	//char matrix[40][40];
 	std::vector <char>* matrix;
+	std::vector <Color> colors;
 	int matrixSize;		//dimension of matrix
 
 	float temperature;
@@ -29,6 +38,8 @@ class MainMatrix{
 	char getRandomSpin(); //zwraca losową wartość spinu spomiędzy 0-masSpin
 
 	public:
+
+	Color getColor(int i){ return colors[i]; }
     MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
     ~MainMatrix();
 	void MetropolisStep();	//does one step of calculation

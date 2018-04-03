@@ -40,7 +40,7 @@ namespace GameEngine {
 		    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 5 * vec4Size, (void*)((size_t)(4 * vec4Size)));
 
 		    // 2nd argument 1 - move to another block after 1 instance
-				
+
 		    glVertexAttribDivisor(1, 1);
 		    glVertexAttribDivisor(2, 1);
 		    glVertexAttribDivisor(3, 1);

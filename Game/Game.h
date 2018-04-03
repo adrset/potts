@@ -28,6 +28,8 @@ private:
 	float m_temp;
 	float m_cFactor;
 	int m_n;
+	int m_fps = 60;
+	int fontNormal;
 	int m_size;
 	void processInput();
 	int m_width;

@@ -7,6 +7,7 @@
 namespace GameEngine {
 
 	bool Window::initialized = false;
+	GLFWwindow* Window::currWindow = nullptr;
 	void Window::init(){
 		if(!initialized){
 			if (!glfwInit())
@@ -52,6 +53,15 @@ namespace GameEngine {
     glViewport(0, 0, width, height);
 	}
 
+	void Window::cursor_enter_callback(GLFWwindow* window, int entered){
+	    if (entered)
+	    {
+	    	currWindow = window;
+	    }else{
+	    	currWindow = nullptr;
+	    }
+	}
+
 	void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		InputManager::addScroll(glm::vec2(xoffset, yoffset));
@@ -61,6 +71,8 @@ namespace GameEngine {
 	{
 		(action != GLFW_RELEASE) ? InputManager::pressKey(key) : InputManager::releaseKey(key);
 	}
+
+
 
 	void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
@@ -108,7 +120,7 @@ namespace GameEngine {
 		const GLFWvidmode* vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(m_window, (int)(0.5 * (vidmode->width - width)), int((0.5*(vidmode->height - height))));
 
-    infos.vWidth = vidmode->width;
+    	infos.vWidth = vidmode->width;
 		infos.vHeight = vidmode->height;
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -116,6 +128,7 @@ namespace GameEngine {
 		glfwSetCursorPosCallback(m_window, cursor_position_callback);
 		glfwSetScrollCallback(m_window, scroll_callback);
 		glfwSetMouseButtonCallback(m_window, mouse_button_callback);
+		glfwSetCursorEnterCallback(m_window, cursor_enter_callback);
 		if(window != nullptr){
 				glfwMakeContextCurrent(window);
 		}

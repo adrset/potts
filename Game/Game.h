@@ -8,6 +8,7 @@
 #include <GameEngine/Shader.h>
 #include <GameEngine/Timer.h>
 #include <GameEngine/QuadField.h>
+#include <GameEngine/Button.h>
 #include <nanovg/nanovg.h>
 
 class Game
@@ -35,6 +36,7 @@ private:
 	int m_height;
 	NVGcontext* m_vg = nullptr;
 	std::string m_title;
+    std::vector<GameEngine::Button> m_buttons;
 	GameEngine::Window* m_window2;
 	GameEngine::Window* m_window;
 	GameEngine::Timer* m_timer;

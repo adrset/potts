@@ -37,7 +37,8 @@ namespace Potts {
 	}
 
 	void MainMatrix::adjustTemperature(float dT){
-		this->temperature += dT;
+		if (this->temperature + dT > 0)
+			this->temperature += dT;
 
 	}
 	int MainMatrix::validRandom(){

@@ -8,7 +8,6 @@
 #include <unistd.h>
 #define NANOVG_GL3_IMPLEMENTATION
 #include <nanovg/nanovg_gl.h>
-#include <GameEngine/Button.h>
 
  // new int c++11 - uniform initialization var{ a}
 Game::Game(int width, int height, std::string title, float t, float cf, int n, int size,int fps): m_temp(t), m_cFactor(cf), m_n(n), m_size(size), m_width{width}, m_height(height), m_title(title)
@@ -17,7 +16,7 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
 
-	m_window2 = new GameEngine::Window(m_width, m_height, "m_title", m_window->getWindowID());
+	m_window2 = new GameEngine::Window(m_width, m_height, "Interface", m_window->getWindowID());
 
 
 
@@ -93,7 +92,7 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 	//m_window2->makeContextCurrent();
 
 	//m_graphWindow = new GameEngine::Window(m_width, m_height, "sec", m_window->getWindowID());
-	m_window2->changePosition(m_window2->getWindowPosition().width+5, 0);
+	m_window2->changePosition(0.5*(m_window2->getWindowPosition().vWidth + m_window2->getWindowPosition().width), 0.5*(m_window2->getWindowPosition().vHeight - m_window2->getWindowPosition().width));
 
 
 
@@ -105,11 +104,14 @@ void Game::start(){
 
 void Game::loop() {
 	NVGpaint bg;
-	int a = 0;
-	GameEngine::Button b(200, 200, 100, 100, 10, [&](void) {// [=] pass all variables from outside by val
-		m_potts->adjustTemperature(-0.01f);
-	});
-	b.setColors(nvgRGBA(121,31,12,255), nvgRGBA(231,121,3,255));
+	m_buttons.push_back(GameEngine::Button(200, 20, 100, 30, m_window2->getWindowID(), "Zmniejsz T", nvgRGBA(21,31,12,255), nvgRGBA(42,121,3,255), 10, 20.0f ,[&](void) {// [=] pass all variables from outside by val
+		m_potts->adjustTemperature(-0.0001f);
+	}));
+	
+	m_buttons.push_back(GameEngine::Button(200, 50, 100, 30, m_window2->getWindowID(), "Zwieksz T", nvgRGBA(121,31,12,255), nvgRGBA(231,121,3,255),10,20.0f ,[&](void) {// [=] pass all variables from outside by val
+		m_potts->adjustTemperature(0.0001f);
+	}));
+
 	while (!m_window->shouldClose() && !m_window2->shouldClose())
 	{
 		m_timer->start();
@@ -118,11 +120,11 @@ void Game::loop() {
 
 		m_window->clear();
 
-  	  m_shader->setMat4("orthoMatrix", m_projection);
+  		m_shader->setMat4("orthoMatrix", m_projection);
 
 		m_field->update(m_shader);
 
-  	gameLogic();
+  		gameLogic();
 
 		// GUI drawing
 		m_window2->makeContextCurrent();
@@ -132,11 +134,13 @@ void Game::loop() {
 
 		nvgBeginPath(m_vg);
 
-		b.draw(m_vg);
-		if(b.isMouseOver(GameEngine::InputManager::getMouseCoords().xy.x, GameEngine::InputManager::getMouseCoords().xy.y) 
-			&& GameEngine::InputManager::isMouseKeyPressed(GLFW_MOUSE_BUTTON_1)){
-			b.click();
+
+		////// GUI drawing
+		for(GameEngine::Button b: m_buttons){
+			b.draw(m_vg);
+			b.isClicked();
 		}
+
 
 		bg = nvgLinearGradient(m_vg, 0,0,0,800, nvgRGBA(255,255,255,16), nvgRGBA(0,0,0,16));
 		nvgFillPaint(m_vg, bg);
@@ -146,17 +150,10 @@ void Game::loop() {
 		nvgFillColor(m_vg, nvgRGBA(255,255,255,255));
 		nvgFontSize(m_vg, 42.0f);
 		nvgFontFace(m_vg, "sans");
-		//SssnvgTextAlign(m_vg,NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
+		nvgTextAlign(m_vg,NVG_ALIGN_LEFT);
 		nvgText(m_vg, 0.f,42.0f, ("FPS: " + std::to_string(m_fps)).c_str(), NULL);
 		nvgText(m_vg, 0.f,72.0f, ("T: " + std::to_string(m_potts->getTemperature())).c_str(), NULL);
-		std::string windowID;
-		if((GLFWwindow*)GameEngine::InputManager::getMouseCoords().window == m_window2->getWindowID()){
-			windowID = m_window2->getInfo().title;
-		}else{
-			windowID = m_window->getInfo().title;
-		}
-		nvgText(m_vg, 0.f,102.0f, ("Window: " + windowID).c_str(), NULL);
-		nvgText(m_vg, 0.f,132.0f, ("X: " + std::to_string((int)GameEngine::InputManager::getMouseCoords().xy.x)).c_str(), NULL);
+		nvgText(m_vg, 0.f,102.0f, ("X: " + std::to_string((int)GameEngine::InputManager::getMouseCoords().xy.x)).c_str(), NULL);
 		nvgEndFrame(m_vg);
 
 		m_window->swapBuffers();

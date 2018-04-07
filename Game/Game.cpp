@@ -15,7 +15,7 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 	GameEngine::Window::init();
 
 	m_window = new GameEngine::Window(m_width, m_height, m_title);
-
+	m_graphWindow = new GameEngine::Window(m_width, m_height, "Graph", m_window->getWindowID());
 	m_window2 = new GameEngine::Window(m_width, m_height, "Interface", m_window->getWindowID());
 
 
@@ -31,17 +31,42 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 		if (fontNormal == -1) {
 			printf("Could not add font italic.\n");
 	}
+	m_graphWindow->makeContextCurrent();
+
+	m_window2->changePosition(0.5*(m_window2->getWindowPosition().vWidth + m_window2->getWindowPosition().width), 0.5*(m_window2->getWindowPosition().vHeight - m_window2->getWindowPosition().width));
+
+	m_graphWindow->changePosition(0.5*(m_window2->getWindowPosition().vWidth - 3 * m_window2->getWindowPosition().width), 0.5*(m_window2->getWindowPosition().vHeight - m_window2->getWindowPosition().width));
+	test.push_back(1.0f);
+	test.push_back(1.0f);
+
+	glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, test.size() * 4, &test[0], GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(0);
+
+
 	m_window->makeContextCurrent();
 
 	m_timer = new GameEngine::Timer(fps);
+
 	lastX = m_width / 2.0f;
 	lastY = m_height / 2.0f;
 
-	srand(time(NULL));
 
 	// build and compile our shader zprogram
 	// ------------------------------------
 	m_shader = new GameEngine::Shader("2dshader.vs", "2dshader.fs");
+	m_graphShader = new GameEngine::Shader("graph.vs", "graph.fs");
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
   // ------------------------------------------------------------------
@@ -65,10 +90,6 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 	std::vector<glm::vec3> pos;
 	std::vector<glm::vec3> col;
 
-
-   /* float temperature       = 0.001;
-    float couplingFactor    = 1;
-    float nSpins            = 2;*/
   m_potts = new Potts::MainMatrix(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
 
   int offset = m_width / m_size;
@@ -81,19 +102,7 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 		}
 	}
 
-    /*
-        dobre wybory:
-        t=3     j=1     max=3   min=0
-        t=      j=      max=    min=
-        t=      j=      max=    min=
-        t=      j=      max=    min=
-    */
 	m_field = new GameEngine::QuadField(vertices, indices, sizeof(vertices), sizeof(indices), pos, col, ((float)m_width) / ((float)m_size));
-	//m_window2->makeContextCurrent();
-
-	//m_graphWindow = new GameEngine::Window(m_width, m_height, "sec", m_window->getWindowID());
-	m_window2->changePosition(0.5*(m_window2->getWindowPosition().vWidth + m_window2->getWindowPosition().width), 0.5*(m_window2->getWindowPosition().vHeight - m_window2->getWindowPosition().width));
-
 
 
 }
@@ -112,7 +121,7 @@ void Game::loop() {
 		m_potts->adjustTemperature(0.0001f);
 	}));
 
-	while (!m_window->shouldClose() && !m_window2->shouldClose())
+	while (!m_window->shouldClose() && !m_window2->shouldClose() && !m_graphWindow->shouldClose())
 	{
 		m_timer->start();
 		processInput();
@@ -156,8 +165,29 @@ void Game::loop() {
 		nvgText(m_vg, 0.f,102.0f, ("X: " + std::to_string((int)GameEngine::InputManager::getMouseCoords().xy.x)).c_str(), NULL);
 		nvgEndFrame(m_vg);
 
+		//graph
+
+		m_graphWindow->makeContextCurrent();
+		m_graphWindow->clear();
+    	m_graphShader->use();
+   
+ 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+    	glDrawArrays(GL_LINES, 0, test.size() / 2);
+    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    	glBindVertexArray(0);
+
 		m_window->swapBuffers();
 		m_window2->swapBuffers();
+		m_graphWindow->swapBuffers();
+		/*glBindVertexArray(VAO);
+		test.push_back(-1.0f);
+		test.push_back(-1.0f);
+   		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+   		glBufferData(GL_ARRAY_BUFFER, test.size() * 4, &test[0], GL_STATIC_DRAW);
+
+    	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+   		glBindVertexArray(0);*/
 
 		glfwPollEvents();
 
@@ -210,7 +240,10 @@ void Game::cleanUp() {
 Game::~Game()
 {
 	delete m_window;
-//	delete m_window2;
+	delete m_shader;
+	delete m_graphShader;
+	delete m_window2;
+	delete m_graphWindow;
 	delete m_timer;
 	std::cout << "Closing game." << std::endl;
 }

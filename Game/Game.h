@@ -23,8 +23,11 @@ public:
 private:
 	glm::mat4 m_projection;
 	GameEngine::Shader* m_shader;
+	GameEngine::Shader* m_graphShader;
 	GameEngine::QuadField* m_field;
 	Potts::MainMatrix* m_potts;
+	unsigned int VBO,VAO;
+	std::vector<float> test;
 	float m_temp;
 	float m_cFactor;
 	int m_n;
@@ -39,6 +42,7 @@ private:
     std::vector<GameEngine::Button> m_buttons;
 	GameEngine::Window* m_window2;
 	GameEngine::Window* m_window;
+	GameEngine::Window* m_graphWindow;
 	GameEngine::Timer* m_timer;
 	float lastX;
 	float lastY;

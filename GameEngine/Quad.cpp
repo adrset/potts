@@ -31,7 +31,7 @@ namespace GameEngine{
   }
 
   Quad::Quad(float *vertices, unsigned int *indices, size_t vSize, size_t iSize, float scale) : Quad(vertices, indices, vSize, iSize, glm::vec2(), glm::vec3(), scale){}
- 
+
   Quad::~Quad(){
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
@@ -55,8 +55,8 @@ namespace GameEngine{
     m_model = glm::mat4();
     m_model = glm::translate(m_model, glm::vec3(m_position.x, m_position.y, 0));
 
-    m_model = glm::scale(m_model, glm::vec3(m_scale)); 
-   
+    m_model = glm::scale(m_model, glm::vec3(m_scale));
+
     shader->setMat4("model", m_model);
     shader->setVec3("color", m_color);
     //shader.setMat4("view", view);

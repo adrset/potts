@@ -99,7 +99,7 @@ void Game::start(){
 }
 
 void Game::loop() {
-	float x = 100;
+	float x = 3.14;
 	NVGpaint bg;
 	m_buttons.push_back(GameEngine::Button(200, 20, 100, 30, m_window2->getWindowID(), "Zmniejsz T", nvgRGBA(21,31,12,255), nvgRGBA(42,121,3,255), 10, 20.0f ,[&](void) {// [=] pass all variables from outside by val
 		m_potts->adjustTemperature(-0.0001f);
@@ -138,8 +138,11 @@ void Game::loop() {
 			b.draw(m_vg);
 			b.isClicked();
 		}
-
-		m_graph->addPoint((1+cos(m_timer->getTime() * 7.14 + 20)) * 100,(1+sin(m_timer->getTime() * 3.14)) * 100);
+		if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_2)){
+			x+=1;
+		}
+		
+		m_graph->addPoint((1+cos(m_timer->getTime() * 3.14 + x)) * 100,(1+sin(m_timer->getTime() * 3.14)) * 100);
 
 
 		bg = nvgLinearGradient(m_vg, 0,0,0,800, nvgRGBA(255,255,255,16), nvgRGBA(0,0,0,16));

@@ -48,6 +48,23 @@ class MainMatrix{
 	void getSpinColor(int x, int y);
 	void adjustTemperature(float dT);
 	float getTemperature() const { return this-> temperature; }
+	int getSpinsN() const { return states; };
+};
+
+class InfoPack{
+
+    MainMatrix * matrix;
+
+    float temperature;
+    float interfaces;
+    float orderFactor;
+    int * stateHistogram;
+
+    public:
+    InfoPack(MainMatrix * currMatrix);
+    void calcStateHistogram(bool doFurtherCalculations);
+    void consolePrintData();
+
 };
 
 

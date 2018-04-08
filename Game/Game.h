@@ -25,6 +25,7 @@ private:
 	GameEngine::Shader* m_shader;
 	GameEngine::QuadField* m_field;
 	Potts::MainMatrix* m_potts;
+	Potts::InfoPack* m_data;
 	float m_temp;
 	float m_cFactor;
 	int m_n;

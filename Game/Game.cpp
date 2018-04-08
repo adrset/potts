@@ -70,6 +70,7 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
     float couplingFactor    = 1;
     float nSpins            = 2;*/
   m_potts = new Potts::MainMatrix(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+  m_data = new Potts::InfoPack(m_potts);
 
   int offset = m_width / m_size;
 
@@ -107,7 +108,7 @@ void Game::loop() {
 	m_buttons.push_back(GameEngine::Button(200, 20, 100, 30, m_window2->getWindowID(), "Zmniejsz T", nvgRGBA(21,31,12,255), nvgRGBA(42,121,3,255), 10, 20.0f ,[&](void) {// [=] pass all variables from outside by val
 		m_potts->adjustTemperature(-0.0001f);
 	}));
-	
+
 	m_buttons.push_back(GameEngine::Button(200, 50, 100, 30, m_window2->getWindowID(), "Zwieksz T", nvgRGBA(121,31,12,255), nvgRGBA(231,121,3,255),10,20.0f ,[&](void) {// [=] pass all variables from outside by val
 		m_potts->adjustTemperature(0.0001f);
 	}));
@@ -182,6 +183,9 @@ void Game::gameLogic(){
 		for(int i=0;i<m_size * m_size;i++){
         	m_potts->MetropolisStep();
 		}
+
+		m_data->calcStateHistogram(false);
+		m_data->consolePrintData();
 
         for(int i=0;i< m_size; i++){
             for(int j=0;j< m_size; j++){

@@ -2,6 +2,11 @@
 
 namespace Potts {
 
+    /*
+    *   METODY MainMatrix
+    *
+    */
+
     MainMatrix::MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin ){
         matrixSize = newMatrixSize;
         temperature = simTemperature;
@@ -88,4 +93,57 @@ namespace Potts {
 
     }
 
+
+    /*
+    *   METODY InfoCluster
+    *
+    */
+
+    InfoPack::InfoPack(MainMatrix * currMatrix){
+        this->matrix = currMatrix;
+        stateHistogram = new int[ this->matrix->getSpinsN() ];
+    }
+
+    void InfoPack::calcStateHistogram(bool doFurtherCalculations){
+
+        int sizeOfMatrix = this->matrix->getMatrixSize();
+
+        for(int a=0;a<this->matrix->getMatrixSize();a++){
+              stateHistogram[a]=0;
+        }
+        interfaces=0;
+
+        for(int x=0;x< sizeOfMatrix;x++ ){
+            for(int y=0;y< sizeOfMatrix;y++ ){
+                stateHistogram[ this->matrix->getSpin(x,y) ]++;
+
+                if( ((x+1) != sizeOfMatrix))
+                    if( matrix->getSpin(x,y) != matrix->getSpin(x+1,y) )
+                        interfaces++;
+
+                if( ((y+1) != sizeOfMatrix))
+                    if( matrix->getSpin(x,y) != matrix->getSpin(x,y+1) )
+                        interfaces++;
+
+            }
+        }
+        orderFactor = 0;
+        float N_over_Q = pow(matrix->getMatrixSize(),2) / matrix->getSpinsN();
+        for(int a=0;a<this->matrix->getMatrixSize();a++){
+              orderFactor += abs( (float)stateHistogram[a] - N_over_Q );
+        }
+
+
+
+    }
+
+    void InfoPack::consolePrintData(){
+        for(int i=0; i<this->matrix->getSpinsN();i++){
+            printf("#%d=%-4d ",i,this->stateHistogram[i]);
+        }
+        printf("| INT=%-4.0 ",interfaces);
+        printf("MAG=%-4.1f ",orderFactor);
+        printf("\n");
+
+    }
 }

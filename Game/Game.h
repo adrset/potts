@@ -9,6 +9,7 @@
 #include <GameEngine/Timer.h>
 #include <GameEngine/QuadField.h>
 #include <GameEngine/Button.h>
+#include <GameEngine/Graph.h>
 #include <nanovg/nanovg.h>
 
 class Game
@@ -26,8 +27,7 @@ private:
 	GameEngine::Shader* m_graphShader;
 	GameEngine::QuadField* m_field;
 	Potts::MainMatrix* m_potts;
-	unsigned int VBO,VAO;
-	std::vector<float> test;
+	GameEngine::Graph* m_graph;
 	float m_temp;
 	float m_cFactor;
 	int m_n;

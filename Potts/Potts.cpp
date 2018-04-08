@@ -108,14 +108,14 @@ namespace Potts {
 
         int sizeOfMatrix = this->matrix->getMatrixSize();
 
-        for(int a=0;a<this->matrix->getMatrixSize();a++){
+        for(int a=0;a<this->matrix->getSpinsN();a++){
               stateHistogram[a]=0;
         }
         interfaces=0;
-
+        printf("hi");
         for(int x=0;x< sizeOfMatrix;x++ ){
             for(int y=0;y< sizeOfMatrix;y++ ){
-                stateHistogram[ this->matrix->getSpin(x,y) ]++;
+                stateHistogram[ (int)this->matrix->getSpin(x,y) ]++;
 
                 if( ((x+1) != sizeOfMatrix))
                     if( matrix->getSpin(x,y) != matrix->getSpin(x+1,y) )
@@ -127,6 +127,7 @@ namespace Potts {
 
             }
         }
+        printf("ig");
         orderFactor = 0;
         float N_over_Q = pow(matrix->getMatrixSize(),2) / matrix->getSpinsN();
         for(int a=0;a<this->matrix->getMatrixSize();a++){
@@ -141,9 +142,8 @@ namespace Potts {
         for(int i=0; i<this->matrix->getSpinsN();i++){
             printf("#%d=%-4d ",i,this->stateHistogram[i]);
         }
-        printf("| INT=%-4.0 ",interfaces);
-        printf("MAG=%-4.1f ",orderFactor);
-        printf("\n");
+        printf("| INT=%f-4.0",interfaces);
+        printf("MAG=%f-4.1f\n",orderFactor);
 
     }
 }

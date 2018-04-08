@@ -19,12 +19,12 @@ namespace GameEngine{
   private:
   	
     GLFWwindow* m_window;
-    int m_x, m_y, m_w, m_h, m_rounds;
+    int m_x, m_y, m_w, m_h;
     std::string m_text;
   	float m_fontSize;
     NVGcolor m_colorA;
     NVGcolor m_colorB;
-
+    int  m_rounds;
 
 
   };

@@ -33,7 +33,6 @@ namespace GameEngine {
 		void setVec2(const std::string &name, const glm::vec2 &value) const;
 	private:
 		int getUniformLocation(const std::string uniform) const;
-		std::map <std::string, int> uniforms;
 		void checkCompileErrors(unsigned int shader, std::string type);
 	};
 }

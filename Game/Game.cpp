@@ -113,6 +113,7 @@ void Game::loop() {
 	while (!m_window->shouldClose() && !m_window2->shouldClose() && !m_graphWindow->shouldClose())
 	{
 
+		// First window drawing
 		m_timer->start();
 		processInput();
 		m_window->makeContextCurrent();
@@ -131,22 +132,17 @@ void Game::loop() {
 
 		nvgBeginFrame(m_vg, m_window2->getInfo().width, m_window2->getInfo().height, m_window2->getFramebufferPixelRatio());
 
-		nvgBeginPath(m_vg);
-
-
 		////// GUI drawing
 		for(GameEngine::Button b: m_buttons){
 			b.draw(m_vg);
 			b.isClicked();
 		}
-		if(GameEngine::InputManager::isKeyPressed(GLFW_KEY_2)){
-			x+=1;
-		}
 		
-		m_graph->addPoint((1+cos(m_timer->getTime() * 3.14 + x)) * 100,(1+sin(m_timer->getTime() * 3.14)) * 100);
-
+		double t = m_timer->getTime();
+		m_graph->addPoint((1+cos(t * 3.14 + x)) * 100,(1+sin(t * 3.14)) * 100);
 
 		bg = nvgLinearGradient(m_vg, 0,0,0,800, nvgRGBA(255,255,255,16), nvgRGBA(0,0,0,16));
+
 		nvgFillPaint(m_vg, bg);
 		nvgRect(m_vg, 0,0, 800,800);
 		nvgFill(m_vg);
@@ -157,14 +153,14 @@ void Game::loop() {
 		nvgTextAlign(m_vg,NVG_ALIGN_LEFT);
 		nvgText(m_vg, 0.f,42.0f, ("FPS: " + std::to_string(m_fps)).c_str(), NULL);
 		nvgText(m_vg, 0.f,72.0f, ("T: " + std::to_string(m_potts->getTemperature())).c_str(), NULL);
-		nvgText(m_vg, 0.f,102.0f, ("X: " + std::to_string((int)GameEngine::InputManager::getMouseCoords().xy.x)).c_str(), NULL);
+
 		nvgEndFrame(m_vg);
 
-		//graph
+		// Graph
 
 		m_graphWindow->makeContextCurrent();
 		m_graphWindow->clear();
-  	m_graph->draw(m_graphShader);
+  		m_graph->draw(m_graphShader);
 
 
 		m_window->swapBuffers();

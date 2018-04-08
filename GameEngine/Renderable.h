@@ -8,6 +8,7 @@ namespace GameEngine{
 	class Renderable{
 		public:
 			Renderable();
+			virtual ~Renderable(){}
 			virtual void draw(Shader* shader)=0;
 
 	};

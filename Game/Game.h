@@ -28,6 +28,7 @@ private:
 	GameEngine::QuadField* m_field;
 	Potts::MainMatrix* m_potts;
 	GameEngine::Graph* m_graph;
+	Potts::InfoPack* m_data;
 	float m_temp;
 	float m_cFactor;
 	int m_n;

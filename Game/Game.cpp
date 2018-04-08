@@ -78,6 +78,7 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 	std::vector<glm::vec3> col;
 
   m_potts = new Potts::MainMatrix(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
+  m_data = new Potts::InfoPack(m_potts);
 
   int offset = m_width / m_size;
 
@@ -192,6 +193,9 @@ void Game::gameLogic(){
 		for(int i=0;i<m_size * m_size;i++){
         	m_potts->MetropolisStep();
 		}
+
+		m_data->calcStateHistogram(false);
+		m_data->consolePrintData();
 
         for(int i=0;i< m_size; i++){
             for(int j=0;j< m_size; j++){

@@ -31,6 +31,8 @@ namespace GameEngine{
     if(!init ){
       maxX = x;
       maxY = y;
+      minX = x;
+      minY = y;
       init = true;
     }
     if(iter / 2 == MAX_POINTS ){
@@ -38,6 +40,8 @@ namespace GameEngine{
     }
     if(x>maxX)  maxX = x;
     if(y>maxY)  maxY = y;
+    if(x<minX)  minX = x;
+    if(y<minY)  minY = y;
 
     m_points[iter++] = x;
     m_points[iter++] = y;
@@ -56,9 +60,8 @@ namespace GameEngine{
       glBindBuffer(GL_ARRAY_BUFFER, 0);
 
       shader->use();
-      shader->setFloat("maxX", maxX);
-      shader->setFloat("maxY", maxY);
-
+      shader->setVec2("min", glm::vec2(minX, minY));
+      shader->setVec2("max", glm::vec2(maxX, maxY));
       glDrawArrays(GL_LINE_STRIP, 0, iter / 2);
       glBindVertexArray(0);
 

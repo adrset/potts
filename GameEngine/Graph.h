@@ -14,8 +14,8 @@ namespace GameEngine{
   private:
     bool init;
     unsigned int iter = 0;
-    float maxX;
-    float maxY;
+    float maxX, minX;
+    float maxY, minY;
     const unsigned int MAX_POINTS = 10000;
     unsigned int m_vao, m_vbo;
     float* m_points;

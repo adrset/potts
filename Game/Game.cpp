@@ -53,8 +53,8 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
 	m_graphShader = new GameEngine::Shader("graph.vs", "graph.fs");
 
 	m_graphShader->use();
-	m_graphShader->setFloat("maxX", 0);
-	m_graphShader->setFloat("maxY", 0);
+	m_graphShader->setVec2("min", glm::vec2());
+    m_graphShader->setVec2("max", glm::vec2());
 	// set up vertex data (and buffer(s)) and configure vertex attributes
   // ------------------------------------------------------------------
   float vertices[] = {
@@ -100,8 +100,9 @@ void Game::start(){
 }
 
 void Game::loop() {
-	float x = 3.14;
+	float i=0;
 	NVGpaint bg;
+	float x=120;
 	m_buttons.push_back(GameEngine::Button(200, 20, 100, 30, m_window2->getWindowID(), "Zmniejsz T", nvgRGBA(21,31,12,255), nvgRGBA(42,121,3,255), 10, 20.0f ,[&](void) {// [=] pass all variables from outside by val
 		m_potts->adjustTemperature(-0.0001f);
 	}));
@@ -109,7 +110,14 @@ void Game::loop() {
 	m_buttons.push_back(GameEngine::Button(200, 50, 100, 30, m_window2->getWindowID(), "Zwieksz T", nvgRGBA(121,31,12,255), nvgRGBA(231,121,3,255),10,20.0f ,[&](void) {// [=] pass all variables from outside by val
 		m_potts->adjustTemperature(0.0001f);
 	}));
+	m_buttons.push_back(GameEngine::Button(200, 80, 100, 30, m_window2->getWindowID(), "Zwieksz X", nvgRGBA(221,31,12,255), nvgRGBA(231,121,3,255),10,20.0f ,[&](void) {// [=] pass all variables from outside by val
+		x+= 1;
+	}));
+	m_buttons.push_back(GameEngine::Button(200, 110, 100, 30, m_window2->getWindowID(), "Zmniejsz X", nvgRGBA(121,12,123,255), nvgRGBA(231,121,3,255),10,20.0f ,[&](void) {// [=] pass all variables from outside by val
+		x-= 1;
+	}));
 
+	
 	while (!m_window->shouldClose() && !m_window2->shouldClose() && !m_graphWindow->shouldClose())
 	{
 
@@ -137,9 +145,9 @@ void Game::loop() {
 			b.draw(m_vg);
 			b.isClicked();
 		}
-		
-		double t = m_timer->getTime();
-		m_graph->addPoint((1+cos(t * 3.14 + x)) * 100,(1+sin(t * 3.14)) * 100);
+	
+		m_graph->addPoint(i, sin(i));
+		i+=0.01;
 
 		bg = nvgLinearGradient(m_vg, 0,0,0,800, nvgRGBA(255,255,255,16), nvgRGBA(0,0,0,16));
 

@@ -66,6 +66,11 @@ namespace GameEngine {
 	{
 		glUniform3fv(getUniformLocation(name), 1, glm::value_ptr(value));
 	}
+
+	void Shader::setVec4(const std::string &name, const glm::vec4 &value) const
+	{
+		glUniform4fv(getUniformLocation(name), 1, glm::value_ptr(value));
+	}
 	void Shader::setVec3(const std::string &name, float x, float y, float z) const
 	{
 		glUniform3f(getUniformLocation(name), x, y, z);

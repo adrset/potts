@@ -61,6 +61,8 @@ class InfoPack{
     int * stateHistogram;
 
     public:
+   	float getInterfaces() const { return this->interfaces ;}
+   	float getOrderFactor() const { return this->orderFactor ;}
     InfoPack(MainMatrix * currMatrix);
     void calcStateHistogram(bool doFurtherCalculations);
     void consolePrintData();

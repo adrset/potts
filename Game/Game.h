@@ -18,7 +18,7 @@ public:
 	~Game();
 	void cleanUp();
 	void start();
-	void gameLogic();
+	void gameLogic(bool * UgottaWORK);
 	void waitAndShoutFPS();
 private:
 	glm::mat4 m_projection;
@@ -26,6 +26,9 @@ private:
 	GameEngine::QuadField* m_field;
 	Potts::MainMatrix* m_potts;
 	Potts::InfoPack* m_data;
+	//Potts::MultiPack* m_multi;
+	Potts::MultiPack2* m_multi2;
+	int stepsDone;
 	float m_temp;
 	float m_cFactor;
 	int m_n;

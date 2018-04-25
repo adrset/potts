@@ -71,6 +71,9 @@ Game::Game(int width, int height, std::string title, float t, float cf, int n, i
     float nSpins            = 2;*/
   m_potts = new Potts::MainMatrix(m_size, m_temp, m_cFactor, m_n, 0 );    //MainMatrix(int newMatrixSize, float simTemperature, float couplingFactor, int maxSpin, int minSpin );
   m_data = new Potts::InfoPack(m_potts);
+  m_multi2 = new Potts::MultiPack2(m_potts,1,2000); //MultiPack2(m_potts_pointer , SimRepeats , StepsInSim)
+  //m_multi = new Potts::MultiPack(m_potts,1,100);
+  stepsDone = 0;
 
   int offset = m_width / m_size;
 
@@ -113,11 +116,13 @@ void Game::loop() {
 		m_potts->adjustTemperature(0.0001f);
 	}));
 
-	while (!m_window->shouldClose() && !m_window2->shouldClose())
+    bool UgottaWORK = true;
+    int iter=0, prescaler=1000;
+	while (!m_window->shouldClose() && !m_window2->shouldClose() && UgottaWORK)
 	{
 		m_timer->start();
 		processInput();
-		m_window->makeContextCurrent();
+        m_window->makeContextCurrent();
 
 		m_window->clear();
 
@@ -125,8 +130,14 @@ void Game::loop() {
 
 		m_field->update(m_shader);
 
-  		gameLogic();
+  		gameLogic(&UgottaWORK);
 
+        iter++;
+
+//if(iter>prescaler)
+if(true)
+{
+    iter=0;
 		// GUI drawing
 		m_window2->makeContextCurrent();
 		m_window2->clear();
@@ -152,9 +163,13 @@ void Game::loop() {
 		nvgFontSize(m_vg, 42.0f);
 		nvgFontFace(m_vg, "sans");
 		nvgTextAlign(m_vg,NVG_ALIGN_LEFT);
-		nvgText(m_vg, 0.f,42.0f, ("FPS: " + std::to_string(m_fps)).c_str(), NULL);
-		nvgText(m_vg, 0.f,72.0f, ("T: " + std::to_string(m_potts->getTemperature())).c_str(), NULL);
-		nvgText(m_vg, 0.f,102.0f, ("X: " + std::to_string((int)GameEngine::InputManager::getMouseCoords().xy.x)).c_str(), NULL);
+		//nvgText(m_vg, 0.f,42.0f, ("FPS: " + std::to_string(m_fps)).c_str(), NULL);
+		//nvgText(m_vg, 0.f,72.0f, ("T: " + std::to_string(m_potts->getTemperature())).c_str(), NULL);
+		nvgText(m_vg, 0.f,102.0f, ("Curr Sim Step: " + std::to_string( m_multi2->getCurrSimStep() )).c_str(), NULL);
+		nvgText(m_vg, 0.f,132.0f, ("Curr SIm Repeat: " + std::to_string( m_multi2->getCurrSimRepeat() )).c_str(), NULL);
+		nvgText(m_vg, 0.f,162.0f, ("Max repeats: " + std::to_string( m_multi2->getMaxSimRepeat() )).c_str(), NULL);
+		//nvgText(m_vg, 0.f,192.0f, ("Max steps per sim: " + std::to_string( m_multi2->getMaxSteppInSim() )).c_str(), NULL);
+
 		nvgEndFrame(m_vg);
 
 		m_window->swapBuffers();
@@ -163,7 +178,7 @@ void Game::loop() {
 		glfwPollEvents();
 
 		waitAndShoutFPS();
-
+}
 
 	}
 
@@ -178,14 +193,16 @@ void Game::waitAndShoutFPS(){
 
 }
 
-void Game::gameLogic(){
-	//POTTS INTENSIFIES!!
+void Game::gameLogic(bool * UgottaWORK){
+
+	//TEN POTTS CHOCIAŻ DZIALA!
+	/*
 		for(int i=0;i<m_size * m_size;i++){
         	m_potts->MetropolisStep();
 		}
 
 		m_data->calcStateHistogram(false);
-		m_data->consolePrintData();
+		//m_data->consolePrintData();
 
         for(int i=0;i< m_size; i++){
             for(int j=0;j< m_size; j++){
@@ -193,6 +210,65 @@ void Game::gameLogic(){
                 m_field->setColor(i*m_size+j, glm::normalize(glm::vec3(m_potts->getColor(color).r,m_potts->getColor(color).g,m_potts->getColor(color).b)));
             }
         }
+        m_data->filePrintData();
+*/
+/*
+        if(stepsDone >= m_multi->steps){    //jeżeli zrobił już tyle iteracji na jednym ukladzie co trzeba to odnow uklad
+            m_multi->setIteratorUp();
+            m_potts->randomizeMatrix();
+            stepsDone=0;
+        }
+        else{
+            for(int i=0;i<m_size * m_size;i++){
+                m_potts->MetropolisStep();
+            }
+            m_multi->calcStateHistogram(stepsDone);
+            stepsDone++;
+
+
+            for(int i=0;i< m_size; i++){
+                for(int j=0;j< m_size; j++){
+                    int color = m_potts->getSpin(i,j);
+                    m_field->setColor(i*m_size+j, glm::normalize(glm::vec3(m_potts->getColor(color).r,m_potts->getColor(color).g,m_potts->getColor(color).b)));
+                }
+            }
+
+        }
+
+        if(m_multi->getSimIterator() >= m_multi->repeats){
+            *UgottaWORK = false;
+            m_multi->filePrintData();
+        }
+*/
+
+
+
+        if( m_multi2->getCurrSimStep() < m_multi2->getMaxSteppInSim() ){
+            for(int i=0;i<m_size * m_size;i++){     //WYKONAJ ODPOWIENIĄ LICZBE POJEDYNCZYCH KROKOW
+                m_potts->MetropolisStep();
+            }
+            m_multi2->calcStepData();
+        }
+        else{
+            m_multi2->ResCurrSimStep();
+            m_multi2->IncrCurrSimRepeat();
+            m_potts->randomizeMatrix();
+        }
+         m_multi2->IncrCurrSimStep();
+
+        if(m_multi2->getCurrSimRepeat() >= m_multi2->getMaxSimRepeat()){
+            *UgottaWORK = false;
+            m_multi2->printDataToFile();
+            m_multi2->ResCurrSimRepeat();
+        }
+
+        for(int i=0;i< m_size; i++){
+                for(int j=0;j< m_size; j++){
+                    int color = m_potts->getSpin(i,j);
+                    m_field->setColor(i*m_size+j, glm::normalize(glm::vec3(m_potts->getColor(color).r,m_potts->getColor(color).g,m_potts->getColor(color).b)));
+                }
+            }
+
 }
 
 void Game::processInput()
